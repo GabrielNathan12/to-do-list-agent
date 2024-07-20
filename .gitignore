@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+.mysqldata
+.pgsql
+.mongo
 # C extensions
 *.so
 
