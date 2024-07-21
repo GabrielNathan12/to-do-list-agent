@@ -1,20 +1,20 @@
 version: '3.8'
 services:
   project:
+    image: projects-project:latest
     build:
       context: .
-      dockerfile: Dockerfile
     ports:
       - 8000:8000
     volumes:
-      - .:/data
+      - ./project:/project
+      - ./data/web/static:/data/web/static/
     depends_on:
       - mysql
+    env_file:
+      - ./dotenv_files/.env
 
   mysql:
     image: mysql:lts
-    restart: always
     env_file:
-      - .env
-    volumes:
-      - .mysqldata:/var/lib/mysql
+      - ./dotenv_files/.env
