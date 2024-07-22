@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  nginx.conf: |
+    events { }
+    http {
+        upstream projects_project {
+            server projects-project:8001;
+        }
+        upstream users_app {
+            server users-app:8002;
+        }
+        upstream tasks_tasks {
+            server tasks-tasks:8003;
+        }
+        server {
+            listen 80;
+            location /projects {
+                proxy_pass http://projects_project;
+            }
+            location /users {
+                proxy_pass http://users_app;
+            }
+            location /tasks {
+                proxy_pass http://tasks_tasks;
+            }
+        }
+    }
