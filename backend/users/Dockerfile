@@ -1,14 +1,22 @@
-FROM python:3.12-slim-bookworm
+FROM node:slim
 
-ENV PYTHONUNBUFFERED 1
+# Define o diretório de trabalho
+WORKDIR /app
 
-WORKDIR /users
+# Copia os arquivos de configuração do npm
+COPY package*.json ./
 
-COPY requirements.txt /users/requirements.txt
+# Instala as dependências
+RUN npm install
 
-RUN pip install -r requirements.txt
+# Copia o restante dos arquivos do projeto
+COPY . .
 
-COPY . /users
+# Expõe a porta 3000
+EXPOSE 3000
 
-CMD python manage.py runserver 0.0.0.0:8002
+# Compila o código TypeScript para JavaScript
+RUN npm run build
 
+# Executa o código compilado
+CMD ["node", "dist/index.js"]

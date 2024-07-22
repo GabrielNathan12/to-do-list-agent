@@ -6,9 +6,10 @@ web
 .mysqldata
 .pgsql
 .mongo
+api_keys.txt
 # C extensions
 *.so
-
+node_modules
 # Distribution / packaging
 .Python
 build/

@@ -1,21 +1,23 @@
 version: '3.8'
+
 services:
-  tasks:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  app:
+    build: .
     ports:
-      - 8002:8002
+      - "3000:3000"
     volumes:
-      - .:/data
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
     depends_on:
       - mongo
+    env_file:
+      - ./dotenv_files/.env
 
   mongo:
     image: mongo:8.0.0-rc13-jammy
     restart: always
     env_file:
-      - .env
+      - ./dotenv_files/.env
     volumes:
       - .mongo:/var/lib/mongodb
 
@@ -24,5 +26,13 @@ services:
     restart: always
     ports:
       - 8081:8081
-    env_file:
-      - .env
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+      - ME_CONFIG_MONGODB_AUTH_USERNAME=root
+      - ME_CONFIG_MONGODB_AUTH_PASSWORD=root
+      - ME_CONFIG_BASICAUTH_USERNAME=gabriel
+      - ME_CONFIG_BASICAUTH_PASSWORD=gabriel
+    depends_on:
+      - mongo

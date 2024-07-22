@@ -1,0 +1,32 @@
+version: '3.8'
+services:
+  users:
+    image: users-user:latest
+    build:
+      context: .
+    ports:
+      - 8002:8002
+    volumes:
+      - ./user:/user
+      - ./data/web/static:/data/web/static/
+    depends_on:
+      - mongo
+    env_file:
+      - ./dotenv_files/.env
+  mongo:
+    image: mongo:8.0.0-rc13-jammy
+    restart: always
+    env_file:
+      - ./dotenv_files/.env
+    volumes:
+      - .mongo:/var/lib/mongodb
+
+  mongo-express:
+    image: mongo-express:1.0.2-20-alpine3.19
+    restart: always
+    ports:
+      - 8081:8081
+    env_file:
+      - ./dotenv_files/.env
+
+
