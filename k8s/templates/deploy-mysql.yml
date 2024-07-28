@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-mysql-deploy
+  labels:
+    app: {{ .Values.mysqldb.name }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.mysqldb.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.mysqldb.name }}
+    spec:
+      containers:
+      - name: {{ .Values.mysqldb.name }}
+        image: {{ .Values.mysqldb.image }}:{{ .Values.mysqldb.tag }}
+        ports:
+        - containerPort: {{ .Values.mysqldb.port }}
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        - name: MYSQL_USER
+          value: "gabriel"
+        - name: MYSQL_PASSWORD
+          value: "1234"
+        - name: MYSQL_DATABASE
+          value: "projects_kanban"

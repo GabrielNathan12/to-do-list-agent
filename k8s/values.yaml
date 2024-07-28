@@ -1,0 +1,47 @@
+mongodb:
+  name: mongo
+  image: mongo
+  tag: 8.0.0-rc13-jammy
+  port: 27017
+  targetPort: 27017
+
+pgsqldb:
+  name: pgsql
+  image: postgres
+  tag: 16.2-alpine3.19
+  port: 5432
+  targetPort: 5432
+
+mysqldb:
+  name: mysql
+  image: mysql
+  tag: lts
+  port: 3306
+  targetPort: 3306
+
+djangomysql:
+  name: django-mysql
+  image: gabrielnathan/projects
+  tag: latest
+  port: 80
+  targetPort: 8001
+
+djangopgsql:
+  name: django-pgsql
+  image: gabrielnathan/tasks
+  tag: latest
+  port: 80
+  targetPort: 8000
+
+nodejs:
+  name: nodejs
+  image: gabrielnathan/users
+  tag: latest
+  port: 80
+  targetPort: 3000
+  
+
+service:
+  type: ClusterIP
+
+replicas: 1

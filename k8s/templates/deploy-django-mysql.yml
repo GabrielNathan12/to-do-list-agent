@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-django-mysql-deploy
+  labels:
+    app: {{ .Values.djangomysql.name }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.djangomysql.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.djangomysql.name }}
+    spec:
+      containers:
+      - name: {{ .Values.djangomysql.name }}
+        image: {{ .Values.djangomysql.image }}:{{ .Values.djangomysql.tag }}
+        ports:
+        - containerPort: {{ .Values.djangomysql.port }}
+        env:
+        - name: MYSQL_ENGINE
+          value: "django.db.backends.mysql"
+        - name: MYSQL_DATABASE
+          value: "projects_kanban"
+        - name: MYSQL_USER
+          value: "gabriel"
+        - name: MYSQL_PASSWORD
+          value: "1234"
+        - name: MYSQL_HOST
+          value: {{.Release.Name }}-mysql-service
+        - name: MYSQL_PORT
+          value: "3306"
+        - name: SECRET_KEY
+          value: "django-insecure-m(qmre5g$0on%s5n_va^80geqg2a4w^$2_o*x0*8bewyw@dx--"
+        - name: DEBUG
+          value: "1"
+        - name: ALLOWED_HOSTS
+          value: "localhost,127.0.0.1,[::1],0.0.0.0, 192.168.49.2"
+        

@@ -2,37 +2,28 @@ version: '3.8'
 
 services:
   app:
-    build: .
+    image: users-user:latest
+    build: 
+      context: .
     ports:
-      - "3000:3000"
+      - 3000:3000
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     depends_on:
       - mongo
     env_file:
-      - ./dotenv_files/.env
+      - ./.env
 
   mongo:
     image: mongo:8.0.0-rc13-jammy
-    restart: always
     env_file:
-      - ./dotenv_files/.env
-    volumes:
-      - .mongo:/var/lib/mongodb
+      - ./.env
 
   mongo-express:
     image: mongo-express:1.0.2-20-alpine3.19
     restart: always
     ports:
       - 8081:8081
-    environment:
-      - ME_CONFIG_MONGODB_SERVER=mongo
-      - ME_CONFIG_MONGODB_PORT=27017
-      - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
-      - ME_CONFIG_MONGODB_AUTH_USERNAME=root
-      - ME_CONFIG_MONGODB_AUTH_PASSWORD=root
-      - ME_CONFIG_BASICAUTH_USERNAME=gabriel
-      - ME_CONFIG_BASICAUTH_PASSWORD=gabriel
     depends_on:
       - mongo

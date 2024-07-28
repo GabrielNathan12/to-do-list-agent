@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-django-pgsql-deploy
+  labels:
+    app: {{ .Values.djangopgsql.name }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.djangopgsql.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.djangopgsql.name }}
+    spec:
+      containers:
+      - name: {{ .Values.djangopgsql.name }}
+        image: {{ .Values.djangopgsql.image }}:{{ .Values.djangopgsql.tag }}
+        ports:
+        - containerPort: {{ .Values.djangopgsql.port }}
+        env:
+        - name: DB_ENGINE
+          value: "django.db.backends.postgresql"
+        - name: POSTGRES_DB
+          value: "postgres"
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          value: "postgres"
+        - name: POSTGRES_HOST
+          value: {{ .Release.Name }}-pgsql-service
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: SECRET_KEY
+          value: "django-insecure-m(qmre5g$0on%s5n_va^80geqg2a4w^$2_o*x0*8bewyw@dx--"
+        - name: DEBUG
+          value: "1"
+        - name: ALLOWED_HOSTS
+          value: "localhost,127.0.0.1,[::1],0.0.0.0, 192.168.49.2"
+        

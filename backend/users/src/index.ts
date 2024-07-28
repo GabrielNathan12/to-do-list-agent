@@ -4,15 +4,14 @@ import userRoutes from './router/routerUser';
 import { config } from 'dotenv';
 import path from 'path';
 
-const environment = config({ path: path.resolve(__dirname, '../dotenv_files/.env') });
-
+const environment = config({ path: path.resolve(__dirname, '../.env') });
 
 const mongoUri = environment.parsed?.ME_CONFIG_MONGODB_URL;
 
 const app = express();
 app.use(express.json());
 
-app.use('/api/users', userRoutes);
+app.use('/', userRoutes);
 
 const PORT = process.env.PORT || 3000;
 

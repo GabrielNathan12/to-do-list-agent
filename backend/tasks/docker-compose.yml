@@ -1,15 +1,19 @@
 version: '3.8'
+
 services:
   tasks:
+    image: tasks-tasks:latest
     build:
       context: .
-      dockerfile: Dockerfile
     ports:
       - 8001:8001
     volumes:
-      - .:/data
+      - ./tasks:/tasks
+      - ./data/web/static:/data/web/static/
     depends_on:
       - pgsql
+    env_file:
+      - ./.env
 
   pgsql:
     image: postgres:16.2-alpine3.19

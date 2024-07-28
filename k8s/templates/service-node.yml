@@ -1,0 +1,23 @@
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: {{ .Release.Name }}-nodejs-service
+# spec:
+#   type: {{ .Values.service.type }}
+#   selector:
+#     app: {{ .Values.nodejs.name }}
+#   ports:
+#   - port: {{ .Values.nodejs.port }}
+#     targetPort: {{ .Values.nodejs.targetPort }}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-nodejs-service
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    app: {{ .Values.nodejs.name }}
+  ports:
+  - port: {{ .Values.nodejs.port }}
+    targetPort: {{ .Values.nodejs.targetPort }}
