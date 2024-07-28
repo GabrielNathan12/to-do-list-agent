@@ -18,3 +18,5 @@ services:
     image: mysql:lts
     env_file:
       - ./.env
+    volumes:
+      - .mysql:/var/lib/mysql

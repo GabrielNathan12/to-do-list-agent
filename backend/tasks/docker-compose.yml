@@ -14,11 +14,9 @@ services:
       - pgsql
     env_file:
       - ./.env
-
   pgsql:
     image: postgres:16.2-alpine3.19
-    restart: always
     env_file:
-      - .env
+      - ./dotenv_files/.env
     volumes:
       - .pgsql:/var/lib/pgsql
