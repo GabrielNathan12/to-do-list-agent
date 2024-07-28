@@ -1,0 +1,59 @@
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: nodejs-deploy
+#   labels:
+#     app: nodejs
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: nodejs
+#   template:
+#     metadata:
+#       labels:
+#         app: nodejs
+#     spec:
+#       containers:
+#       - name: nodejs
+#         image: gabrielnathan/users:latest
+#         ports:
+#         - containerPort: 3000
+#         env:
+#         - name: ME_CONFIG_MONGODB_URL
+#           value: "mongodb://mongodb-service:27017/mongo_db"
+#         - name: MONGO_DB_PORT
+#           value: "27017"
+#         - name: JWT_SECRET
+#           value: "2dsjkdas09dsa90dajkasdamks@!$%%ad0989nk-23$$!@"
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-nodejs-deploy
+  labels:
+    app: {{ .Values.nodejs.name }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.nodejs.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.nodejs.name }}
+    spec:
+      containers:
+      - name: {{ .Values.nodejs.name }}
+        image: {{ .Values.nodejs.image }}:{{ .Values.nodejs.tag }}
+        ports:
+        - containerPort: {{ .Values.nodejs.port }}
+        env:
+        - name: ME_CONFIG_MONGODB_URL
+          value: mongodb://{{ .Release.Name }}-mongodb-service:{{ .Values.mongodb.port }}
+        - name: MONGO_DB_PORT
+          value: "27017"
+        - name: JWT_SECRET
+          value: "2dsjkdas09dsa90dajkasdamks@!$%%ad0989nk-23$$!@"
+

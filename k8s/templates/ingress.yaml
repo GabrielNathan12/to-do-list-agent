@@ -1,0 +1,34 @@
+{{- if .Values.ingress.enable }}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: deploy-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: "/tasks"
+            backend:
+              service:
+                name: demo-django-pgsql-service
+                port:
+                  number: 80
+          - pathType: Prefix
+            path: "/users"
+            backend:
+              service:
+                name: demo-node-mongo-service
+                port:
+                  number: 80
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: demo-django-mysql-service
+                port:
+                  number: 80
+{{- end }}

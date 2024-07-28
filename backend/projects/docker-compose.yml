@@ -12,11 +12,11 @@ services:
     depends_on:
       - mysql
     env_file:
-      - ./dotenv_files/.env
+      - ./.env
 
   mysql:
     image: mysql:lts
     env_file:
-      - ./dotenv_files/.env
+      - ./.env
     volumes:
       - .mysql:/var/lib/mysql

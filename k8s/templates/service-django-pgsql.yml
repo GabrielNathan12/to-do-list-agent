@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-django-psql-service
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    app: {{ .Values.djangopgsql.name }}
+  ports:
+  - port: {{ .Values.djangopgsql.port }}
+    targetPort: {{ .Values.djangopgsql.targetPort }}
