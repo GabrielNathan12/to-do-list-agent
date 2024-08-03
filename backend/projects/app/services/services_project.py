@@ -28,10 +28,8 @@ class ProjectServices:
     def delete_project(id):
         try:
             project = Projects.objects.get(pk=id)
-
+            project.delete()
         except Projects.DoesNotExist:
             return False
 
-        project.delete()
-        
         return True
