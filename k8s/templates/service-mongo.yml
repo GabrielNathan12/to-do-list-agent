@@ -9,17 +9,3 @@ spec:
   ports:
   - port: {{ .Values.mongodb.port }}
     targetPort: {{ .Values.mongodb.targetPort }}
-
-
-
-# apiVersion: v1
-# kind: Service
-# metadata:
-#   name: {{ .Release.Name }}-mongodb-service
-# spec:
-#   type: {{ .Values.service.type }}
-#   selector:
-#     app: {{ .Values.mongodb.name }}
-#   ports:
-#   - port: {{ .Values.mongodb.port }}
-#     targetPort: {{ .Values.mongodb.port }}

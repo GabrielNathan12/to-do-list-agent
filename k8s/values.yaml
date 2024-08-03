@@ -23,25 +23,52 @@ djangomysql:
   name: django-mysql
   image: gabrielnathan/projects
   tag: latest
-  port: 80
-  targetPort: 8001
 
 djangopgsql:
   name: django-pgsql
   image: gabrielnathan/tasks
   tag: latest
-  port: 80
-  targetPort: 8000
 
 nodejs:
   name: nodejs
   image: gabrielnathan/users
   tag: latest
-  port: 80
-  targetPort: 3000
-  
 
 service:
   type: ClusterIP
 
 replicas: 1
+
+secrets:
+  mongodb_url: bW9uZ29kYjovL2RlbW8tbW9uZ29kYi1zZXJ2aWNlOjI3MDE3L2Ri
+  mongodb_port: MjcwMTc=
+  jwt_secret: MmRzamtkYXMwOWRzYTkwZGFqa2FzZGFta3NAISQlJWFkMDk4OW5rLTIzJCQhQA==
+  pgsql_db: cG9zdGdyZXM=
+  pgsql_user: cG9zdGdyZXM=
+  pgsql_password: cG9zdGdyZXM=
+  
+  mysql_root_password: cGFzc3dvcmQ=
+  mysql_user: Z2FicmllbA==
+  mysql_user_password: Z2FicmllbDEyMw==
+  mysql_db: cHJvamVjdHNfa2FuYmFu
+  
+  django_engine_pgsql: ZGphbmdvLmRiLmJhY2tlbmRzLnBvc3RncmVzcWw=
+  django_host_pgsql: ZGVtby1wZ3NxbC1zZXJ2aWNl
+  django_port_pgsql: NTQzMg==
+  django_secret_key_pgsql: ZGphbmdvLWluc2VjdXJlLW0ocW1yZTVnJDBvbiVzNW5fdmFeODBnZXFnMmE0d14kMl9vKngwKjhiZXd5d0BkeC0t
+  django_debug_pgsql: MQ==
+  django_allowed_hosts_pgsql: bG9jYWxob3N0LDEyNy4wLjAuMSxbOjoxXSwwLjAuMC4wLCAxOTIuMTY4LjQ5LjI=
+  
+  django_engine_mysql: ZGphbmdvLmRiLmJhY2tlbmRzLm15c3Fs
+  django_host_mysql: ZGVtby1teXNxbC1zZXJ2aWNl
+  django_port_mysql: MzMwNg==
+  django_secret_key_mysql: ZGphbmdvLWluc2VjdXJlLW0ocW1yZTVnJDBvbiVzNW5fdmFeODBnZXFnMmE0d14kMl9vKngwKjhiZXd5d0BkeC0t
+  django_debug_mysql: MQ==
+  django_allowed_hosts_mysql: bG9jYWxob3N0LDEyNy4wLjAuMSxbOjoxXSwwLjAuMC4wLCAxOTIuMTY4LjQ5LjI=
+
+volumes:
+  names: 
+    volume_mysql: mysql-storage
+    volume_pgsql: pgsql-storage
+    volume_mongo: mongo-storage
+  storage: 1Mi

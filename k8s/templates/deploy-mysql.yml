@@ -15,16 +15,35 @@ spec:
         app: {{ .Values.mysqldb.name }}
     spec:
       containers:
-      - name: {{ .Values.mysqldb.name }}
-        image: {{ .Values.mysqldb.image }}:{{ .Values.mysqldb.tag }}
-        ports:
-        - containerPort: {{ .Values.mysqldb.port }}
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: password
-        - name: MYSQL_USER
-          value: "gabriel"
-        - name: MYSQL_PASSWORD
-          value: "1234"
-        - name: MYSQL_DATABASE
-          value: "projects_kanban"
+        - name: {{ .Values.mysqldb.name }}
+          image: {{ .Values.mysqldb.image }}:{{ .Values.mysqldb.tag }}
+          ports:
+            - containerPort: {{ .Values.mysqldb.port }}
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secrets
+                  key: MYSQL_ROOT_PASSWORD
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secrets
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secrets
+                  key: MYSQL_PASSWORD
+            - name: MYSQL_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Release.Name }}-secrets
+                  key: MYSQL_DATABASE
+          volumeMounts:
+            - name: {{ .Values.volumes.names.volume_mysql }}
+              mountPath: /var/lib/mysql
+      volumes:
+        - name: {{ .Values.volumes.names.volume_mysql }}
+          persistentVolumeClaim:
+            claimName: {{ .Release.Name }}-mysql-volume-claim

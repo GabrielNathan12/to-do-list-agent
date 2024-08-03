@@ -18,24 +18,50 @@ spec:
       - name: {{ .Values.djangopgsql.name }}
         image: {{ .Values.djangopgsql.image }}:{{ .Values.djangopgsql.tag }}
         ports:
-        - containerPort: {{ .Values.djangopgsql.port }}
+        - containerPort: 8001
         env:
         - name: DB_ENGINE
-          value: "django.db.backends.postgresql"
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: DB_ENGINE_DJANGO_PGSQL
         - name: POSTGRES_DB
-          value: "postgres"
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: POSTGRES_DB
         - name: POSTGRES_USER
-          value: "postgres"
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: POSTGRES_USER
         - name: POSTGRES_PASSWORD
-          value: "postgres"
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: POSTGRES_PASSWORD
         - name: POSTGRES_HOST
-          value: {{ .Release.Name }}-pgsql-service
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: DB_HOST_PGSQL
         - name: POSTGRES_PORT
-          value: "5432"
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: DJANGO_PORT_PGSQL
         - name: SECRET_KEY
-          value: "django-insecure-m(qmre5g$0on%s5n_va^80geqg2a4w^$2_o*x0*8bewyw@dx--"
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: DJANGO_SECRET_KEY_PGSQL
         - name: DEBUG
-          value: "1"
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: DJANGO_DEBUB_PGSQL
         - name: ALLOWED_HOSTS
-          value: "localhost,127.0.0.1,[::1],0.0.0.0, 192.168.49.2"
-        
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: DJANGO_ALLOWED_HOST_PGSQL
