@@ -1,12 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import userRoutes from './router/routerUser';
-import { config } from 'dotenv';
-import path from 'path';
 
-const environment = config({ path: path.resolve(__dirname, '../.env') });
-
-const mongoUri = environment.parsed?.ME_CONFIG_MONGODB_URL;
+const mongoUri = process.env.ME_CONFIG_MONGODB_URL;
 
 const app = express();
 app.use(express.json());
@@ -20,5 +16,5 @@ mongoose.connect(mongoUri as string)
   .catch(err => console.error('Erro ao conectar ao MongoDB:', err));
 
 app.listen(PORT, () => {
-  console.log(`http://localhost:${PORT}/api/users`);
+  console.log('http://localhost:${PORT}/');
 });

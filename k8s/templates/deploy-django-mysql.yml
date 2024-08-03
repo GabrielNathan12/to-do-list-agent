@@ -18,24 +18,50 @@ spec:
       - name: {{ .Values.djangomysql.name }}
         image: {{ .Values.djangomysql.image }}:{{ .Values.djangomysql.tag }}
         ports:
-        - containerPort: {{ .Values.djangomysql.port }}
+        - containerPort: 8000
         env:
         - name: MYSQL_ENGINE
-          value: "django.db.backends.mysql"
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: DB_ENGINE_DJANGO_MYSQL
         - name: MYSQL_DATABASE
-          value: "projects_kanban"
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: MYSQL_DATABASE
         - name: MYSQL_USER
-          value: "gabriel"
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: MYSQL_USER
         - name: MYSQL_PASSWORD
-          value: "1234"
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: MYSQL_PASSWORD
         - name: MYSQL_HOST
-          value: {{.Release.Name }}-mysql-service
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: DB_HOST_MYSQL
         - name: MYSQL_PORT
-          value: "3306"
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: DJANGO_PORT_MYSQL
         - name: SECRET_KEY
-          value: "django-insecure-m(qmre5g$0on%s5n_va^80geqg2a4w^$2_o*x0*8bewyw@dx--"
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: DJANGO_SECRET_KEY_MYSQL        
         - name: DEBUG
-          value: "1"
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: DJANGO_DEBUB_MYSQL 
         - name: ALLOWED_HOSTS
-          value: "localhost,127.0.0.1,[::1],0.0.0.0, 192.168.49.2"
-        
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: DJANGO_ALLOWED_HOST_MYSQL         

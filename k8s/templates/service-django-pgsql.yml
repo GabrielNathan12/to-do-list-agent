@@ -7,5 +7,5 @@ spec:
   selector:
     app: {{ .Values.djangopgsql.name }}
   ports:
-  - port: {{ .Values.djangopgsql.port }}
-    targetPort: {{ .Values.djangopgsql.targetPort }}
+  - port: 80
+    targetPort: 8001
