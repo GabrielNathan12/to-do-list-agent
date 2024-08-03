@@ -60,5 +60,3 @@ class TaskView(APIView):
             return Response({'sucess': 'task is deleted'}, status=status.HTTP_200_OK)
 
         return Response({'error': 'task not found'}, status=status.HTTP_404_NOT_FOUND)
- 
-#https://www.youtube.com/watch?v=ubCvfws1m4A&list=PLJ4k1IC8GhW24-nppbX0n0OE3DBGhsYEs&index=2
