@@ -3,11 +3,18 @@ kind: Ingress
 metadata:
   name: {{ .Release.Name }}-deploy-ingress
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+
 spec:
   rules:
   - http:
       paths:
+      - pathType: Prefix
+        path: "/ai"
+        backend:
+          service:
+            name: {{ .Release.Name }}-django-psql-service
+            port:
+              number: 80
       - pathType: Prefix
         path: "/tasks"
         backend:

@@ -65,3 +65,27 @@ spec:
             secretKeyRef:
               name: {{ .Release.Name }}-secrets
               key: DJANGO_ALLOWED_HOST_PGSQL
+        - name: CORS_ALLOWED_ORIGINS
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: CORS_ALLOWED_ORIGINS
+        - name: OPEN_AI_MODEL
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: OPEN_AI_MODEL  
+        - name: OPEN_AI_KEY
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: OPEN_AI_KEY  
+              
+        
+        
+
+             
+    
+
+
+
