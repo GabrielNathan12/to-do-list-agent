@@ -7,7 +7,7 @@ const mongoUri = process.env.ME_CONFIG_MONGODB_URL;
 const app = express();
 app.use(express.json());
 
-app.use('/', userRoutes);
+app.use('/users', userRoutes);
 
 const PORT = process.env.PORT || 3000;
 

@@ -18,6 +18,6 @@ from django.urls import path
 from app.views import TaskView, AIView
 
 urlpatterns = [
-    path('', TaskView.as_view()),
+    path('tasks/', TaskView.as_view()),
     path('ai/', AIView.as_view())
 ]

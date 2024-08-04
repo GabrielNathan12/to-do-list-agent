@@ -22,17 +22,17 @@ mysqldb:
 djangomysql:
   name: django-mysql
   image: gabrielnathan/projects
-  tag: latest
+  tag: 1.0.0
 
 djangopgsql:
   name: django-pgsql
   image: gabrielnathan/tasks
-  tag: latest
+  tag: 1.0.1
 
 nodejs:
   name: nodejs
   image: gabrielnathan/users
-  tag: latest
+  tag: 1.0.0
 
 service:
   type: ClusterIP
@@ -43,6 +43,7 @@ secrets:
   mongodb_url: bW9uZ29kYjovL2RlbW8tbW9uZ29kYi1zZXJ2aWNlOjI3MDE3L2Ri
   mongodb_port: MjcwMTc=
   jwt_secret: MmRzamtkYXMwOWRzYTkwZGFqa2FzZGFta3NAISQlJWFkMDk4OW5rLTIzJCQhQA==
+  
   pgsql_db: cG9zdGdyZXM=
   pgsql_user: cG9zdGdyZXM=
   pgsql_password: cG9zdGdyZXM=
@@ -52,12 +53,16 @@ secrets:
   mysql_user_password: Z2FicmllbDEyMw==
   mysql_db: cHJvamVjdHNfa2FuYmFu
   
+  cors_allowed_origins: aHR0cDovL2xvY2FsaG9zdDo0MjAw
   django_engine_pgsql: ZGphbmdvLmRiLmJhY2tlbmRzLnBvc3RncmVzcWw=
   django_host_pgsql: ZGVtby1wZ3NxbC1zZXJ2aWNl
   django_port_pgsql: NTQzMg==
   django_secret_key_pgsql: ZGphbmdvLWluc2VjdXJlLW0ocW1yZTVnJDBvbiVzNW5fdmFeODBnZXFnMmE0d14kMl9vKngwKjhiZXd5d0BkeC0t
   django_debug_pgsql: MQ==
   django_allowed_hosts_pgsql: bG9jYWxob3N0LDEyNy4wLjAuMSxbOjoxXSwwLjAuMC4wLCAxOTIuMTY4LjQ5LjI=
+  
+  open_ai_model: Z3B0LTRvLW1pbmk=
+  open_ai_key: c2stcHJvai1QemFTSjRYR0hCUFhDZFFvcUczelQzQmxia0ZKbDNtWHBLWTFydkNXRWI0SUlTUEg=
   
   django_engine_mysql: ZGphbmdvLmRiLmJhY2tlbmRzLm15c3Fs
   django_host_mysql: ZGVtby1teXNxbC1zZXJ2aWNl

@@ -64,4 +64,9 @@ spec:
           valueFrom:
             secretKeyRef:
               name: {{ .Release.Name }}-secrets
-              key: DJANGO_ALLOWED_HOST_MYSQL         
+              key: DJANGO_ALLOWED_HOST_MYSQL
+        - name: CORS_ALLOWED_ORIGINS
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: CORS_ALLOWED_ORIGINS
