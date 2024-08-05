@@ -1,0 +1,39 @@
+html,body{
+    height: 100%;
+    margin: 0;
+    background: linear-gradient(to bottom, #932B2B, #3D2244, #000000);
+    display: grid;
+    place-items: center;
+}
+
+form{
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 2.0);
+    max-width: 400px;
+    background-color:  linear-gradient(to bottom, #bf2727, #672e76, #454343);;
+    font-size: 20px;
+}
+
+button {
+    margin-top: 20px;
+    border-radius: 5px;
+    width: 100%
+}
+
+button[type="submit"] {
+    background-color: #a93939;
+    color: #fff;
+    border: none;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0.75rem;
+    border-radius: 1000px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button[type="submit"]:hover {
+    background-color: #860d0d;
+    transform: scale(1.04);
+}
