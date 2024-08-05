@@ -23,6 +23,10 @@ router.delete('/:id', (request:Request, response:Response) => {
 
 router.post('/login', (request:Request, response:Response) =>{
     userController.login(request, response)
-})
+});
+router.post('/verify', (request:Request, response:Response) =>{
+    userController.verifyToken(request, response)
+});
+
 
 export default router;

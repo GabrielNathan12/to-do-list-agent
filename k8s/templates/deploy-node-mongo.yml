@@ -35,4 +35,8 @@ spec:
             secretKeyRef:
               name: {{ .Release.Name }}-secrets
               key: JWT_SECRET
-
+        - name: CORS_ALLOWED_ORIGINS
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: CORS_ALLOWED_ORIGINS
