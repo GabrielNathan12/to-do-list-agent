@@ -3,6 +3,7 @@ kind: Ingress
 metadata:
   name: {{ .Release.Name }}-deploy-ingress
   annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"  # Ativa o suporte a expressões regulares
 
 spec:
   rules:

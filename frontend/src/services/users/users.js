@@ -13,3 +13,18 @@ export const register = (name, email, password) => {
         "password": password
     })
 }
+export const verifyToken = async (token) => {
+    try {
+      const response = await apiUsers.post('/verify', {}, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.status === 200;
+    } catch (error) {
+      if (error.response && (error.response.status === 400 || error.response.status === 403)) {
+        return false;
+      }
+      throw error;
+    }
+  };

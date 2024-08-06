@@ -1,0 +1,64 @@
+.kanban-board {
+    display: flex;
+    justify-content: space-between;
+    text-align: center;
+    gap: 20px;
+    padding: 20px;
+    background-color: transparent;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 1200px; /* Define uma largura máxima para o quadro */
+    margin: 0 auto; /* Centraliza o quadro horizontalmente */
+}
+
+.kanban-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centraliza horizontalmente o conteúdo dentro da coluna */
+    background-color: #575151;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px; /* Reduzido de 20px para 15px */
+    min-width: 200px; /* Define uma largura mínima para as colunas */
+    max-width: 300px; /* Define uma largura máxima para as colunas */
+}
+
+.kanban-column h2 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #000000;
+}
+
+.kanban-task {
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease;
+    width: 100px; /* Largura fixa para os cards */
+    min-width: 250px; /* Altura mínima do card */
+    text-align: center; /* Centraliza o texto dentro do card */
+    display: flex; /* Usado para centralizar o conteúdo verticalmente */
+    flex-direction: column; /* Alinha os itens em uma coluna */
+    justify-content: left; /* Centraliza verticalmente o conteúdo dentro do card */
+}
+
+
+.kanban-task h3 {
+    margin: 0;
+    font-size: 15px; /* Reduzido de 16px para 14px */
+    color: #000000;
+}
+
+.kanban-task p {
+    margin: 3px 0 0; /* Ajuste do espaçamento para se adequar ao tamanho reduzido */
+    font-size: 12px; /* Reduzido de 14px para 12px */
+    color: #000000;
+}
+
+.kanban-task.dragging {
+    background-color: #d0d0d0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}

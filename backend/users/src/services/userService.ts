@@ -11,7 +11,13 @@ class UserService{
             throw new Error(`Error fetching users: ${error.message}`);
         }
     }
-
+    public async find_by_id(id: string){
+        try {
+            return await User.findById(id).exec()
+        }catch (error:any) {
+            throw new Error(`Error fetching user by id: ${error.message}`)
+        }
+    }
     public async create_new_user(userData: IUser) {
         try {
             const newUser = new User(userData);

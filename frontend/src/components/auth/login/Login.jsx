@@ -22,7 +22,10 @@ export const Login = () => {
             setErrorMessage('')
 
             const token = response.data.token
+
             localStorage.setItem('token', token)
+            localStorage.setItem('email', email)
+            
             setTimeout(() => {
                 navigate('/dashboard')
             }, 2000)
