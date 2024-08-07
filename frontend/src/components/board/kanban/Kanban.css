@@ -91,3 +91,46 @@
     top: 0;
     left: 150px;
 }
+
+@media (max-width: 768px) {
+    .kanban-column {
+        width: 90%;
+        margin: 10px auto;
+    }
+    
+    .kanban-task {
+        padding: 8px;
+    }
+    
+    .kanban-task h4 {
+        font-size: 14px;
+    }
+    
+    .kanban-task p {
+        font-size: 12px;
+    }
+    
+    .kanban-task .task-actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .kanban-column {
+        width: 100%;
+        margin: 5px 0;
+    }
+
+    .kanban-task {
+        padding: 5px;
+    }
+
+    .kanban-task h4 {
+        font-size: 12px;
+    }
+
+    .kanban-task p {
+        font-size: 10px;
+    }
+}

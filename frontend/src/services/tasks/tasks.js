@@ -1,4 +1,4 @@
-import { apiTasks } from '../api/api'
+import { apiTasks, apiTasksAi } from '../api/api'
 
 export const fetchAllTasks = () => {
     return apiTasks.get('', {})
@@ -34,4 +34,10 @@ export const deleteTask = (idTask) => {
     return apiTasks.delete('', {
         data: {id: idTask}
     })
+}
+
+export const responseAiTask = (title, description) => {
+    return apiTasksAi.post('',
+        {"title": title, "description":description}
+    )
 }

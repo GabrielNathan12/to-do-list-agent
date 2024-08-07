@@ -3,15 +3,20 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Navbar } from "../navbar/Navbar";
-import { fetchAllTasks, updateTask, createTask, deleteTask } from "../../../services/tasks/tasks";
+import { fetchAllTasks, updateTask, createTask, deleteTask, responseAiTask } from "../../../services/tasks/tasks";
 import { verifyToken } from '../../../services/users/users';
 import { fetchProjectById, updateProject } from "../../../services/projects/projects";
 import { MdAddCircleOutline, MdOutlineDeleteSweep } from "react-icons/md";
 import { FiDelete } from "react-icons/fi";
 import { IoAdd } from "react-icons/io5";
 import { Button, TextField } from '@mui/material';
-import { Checkbox, IconButton } from '@mui/material';
-import { CheckCircle, Cancel } from '@mui/icons-material'; 
+import BpCheckbox from '@mui/material/Checkbox';
+import { RiRobot2Line } from "react-icons/ri";
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
 import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
@@ -29,7 +34,11 @@ export const Kanban = () => {
     const [newColumnName, setNewColumnName] = useState("");
     const [newTask, setNewTask] = useState({ title: "", description: "", columnIndex: null });
     const [errors, setErrors] = useState({});
-
+    const [modalEditTaskOpen, setModalEditTaskOpen] = useState(false);
+    const [editTask, setEditTask] = useState(null);
+    const [priority, setPriority] = useState('')
+    const [responseAi, setResponseAi] = useState([])
+    
     useEffect(() => {
         const fetchTasksAndProject = async () => {
             const token = localStorage.getItem('token');
@@ -62,7 +71,22 @@ export const Kanban = () => {
 
         fetchTasksAndProject();
     }, [kanbanId, navigate]);
-
+    
+    const getPriorityColor = (priority) => {
+        switch (priority) {
+            case 'urgent':
+                return '#FF6F61'; // Vermelho
+            case 'high':
+                return '#FFA07A'; // Laranja
+            case 'average':
+                return '#FFD700'; // Amarelo
+            case 'no_priority':
+                return '#D3D3D3'; // Cinza
+            default:
+                return '#FFFFFF'; // Branco padrão
+        }
+    };
+    
     const getTasksForColumn = (columnIndex) => {
         return tasks.filter(task => task.column === columnIndex);
     };
@@ -124,7 +148,11 @@ export const Kanban = () => {
             console.error('Erro ao atualizar a tarefa:', error);
         }
     };
-
+    const openEditTaskModal = (task) => {
+        setEditTask(task);
+        setPriority(task.priority);
+        setModalEditTaskOpen(true);
+    };
     const handleDeleteColumn = async (columnIndex) => {
         const userEmail = localStorage.getItem('email');
 
@@ -188,9 +216,26 @@ export const Kanban = () => {
         setNewTask({ title: "", description: "", columnIndex });
         setModalTaskOpen(true);
     };
-    
-    const handleTaskStatusChange = async (idTask, is_finihed)=> {
 
+    const handleTaskStatusChange = async (task, is_finihed)=> {
+        try {
+            await updateTask(
+                task.id,
+                task.title,
+                task.column,
+                task.description,
+                task.created_date,
+                is_finihed,
+                task.priority,
+                task.project_id,
+                task.user_email
+            );
+
+            await handleUpdateWindow()
+            
+        } catch (error) {
+            console.error('Erro ao atualizar a tarefa:', error);
+        }
     }
     const handleSaveTask = async (event) => {
         event.preventDefault();
@@ -234,6 +279,40 @@ export const Kanban = () => {
             console.log(error)
         }
     }
+    const handleResponseAi = async () => {
+        if (!editTask){
+            return
+        }
+        
+        try {
+            const response = await responseAiTask(editTask.title, editTask.description)
+            setResponseAi(response.data.soluções)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const handleEditTask = async (event) => {
+        event.preventDefault();
+        try {
+            await updateTask(
+                editTask.id,
+                editTask.title,
+                editTask.column,
+                editTask.description,
+                editTask.created_date,
+                editTask.is_finihed,
+                priority,
+                editTask.project_id,
+                editTask.user_email
+            );
+
+            await handleUpdateWindow();
+            setModalEditTaskOpen(false);
+            setEditTask(null);
+        } catch (error) {
+            console.error('Erro ao editar a tarefa:', error);
+        }
+    };
     return (
         <div className="dashboard-container">
             <div className="dashboard-content">
@@ -282,17 +361,21 @@ export const Kanban = () => {
                                                         ref={provided.innerRef}
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
+                                                        
+                                                        style={{
+                                                            ...provided.draggableProps.style,
+                                                            backgroundColor: getPriorityColor(task.priority) // Aplica a cor da prioridade
+                                                        }}
                                                     >
-                                                    <Checkbox
-                                                        checked={task.is_finihed}
-                                                        onChange={(e) => handleTaskStatusChange(task.id, e.target.checked)}
-                                                        icon={<Cancel />} // Ícone para não concluído
-                                                        checkedIcon={<CheckCircle />} // Ícone para concluído
-                                                    />
+                        
+                                                        <BpCheckbox checked={task.is_finihed} onClick={(e) => handleTaskStatusChange(task, e.target.checked)}/>
                                                         <FiDelete className='icon-edit' onClick={() => handleDeleteTasks(task.id)}/>
-                                                        <h3>{task.title}</h3>
-                                                        <p>{task.description}</p>
+                                                        <div onClick={() => openEditTaskModal(task)}>
+                                                            <h3>{task.title}</h3>
+                                                            <p>{task.description}</p>
+                                                        </div>
                                                     </div>
+
                                                 )}
                                             </Draggable>
                                         ))}
@@ -337,6 +420,60 @@ export const Kanban = () => {
                         <Button type="submit" variant="contained" color="primary">Adicionar</Button>
                     </form>
                 </Modal>
+                <Modal
+                isOpen={modalEditTaskOpen}
+                onRequestClose={() => setModalEditTaskOpen(false)}
+                contentLabel="Editar Tarefa"
+            >
+                <h2>Editar Tarefa</h2>
+                <form onSubmit={handleEditTask}>
+                    <TextField
+                        label="Título"
+                        value={editTask?.title || ""}
+                        onChange={(e) => setEditTask({ ...editTask, title: e.target.value })}
+                        fullWidth
+                    />
+                    <TextField
+                        label="Descrição"
+                        value={editTask?.description || ""}
+                        onChange={(e) => setEditTask({ ...editTask, description: e.target.value })}
+                        fullWidth
+                        multiline
+                        rows={4}
+                    />
+                    <FormControl fullWidth>
+                        <InputLabel>Prioridade</InputLabel>
+                        <Select
+                            value={priority}
+                            onChange={(e) => setPriority(e.target.value)}
+                        >
+                            <MenuItem value="urgent">Urgente</MenuItem>
+                            <MenuItem value="high">Alta</MenuItem>
+                            <MenuItem value="average">Média</MenuItem>
+                            <MenuItem value="no_priority">Sem Prioridade</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <Button type="submit" variant="contained" color="primary">
+                        Salvar
+                    </Button>
+                    <Button variant="contained" color="secondary" onClick={handleResponseAi}>
+                        <span role="img" aria-label="robo">🤖</span> Obter Soluções da IA
+                    </Button>
+                </form>
+                {responseAi.length > 0 && (
+                    <div className="solutions-container">
+                        <h3>Soluções Sugeridas</h3>
+                        <ul>
+                            {responseAi.map((solução, index) => (
+                                <li key={index}>
+                                    <h4>{solução.etapa}</h4>
+                                    <p>{solução.descrição}</p>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
+            </Modal>
             </div>
         </div>
     );
