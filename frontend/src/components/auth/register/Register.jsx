@@ -49,8 +49,10 @@ export function Register() {
                 <div className="user-icon">
                     <FaRegUserCircle/>
                 </div>
-                {successMessage && <Alert severity="success">{successMessage}</Alert>}
-                {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+                <div className="alert-container">
+                    {successMessage && <Alert severity="success">{successMessage}</Alert>}
+                    {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+                </div>
                 <div className='input-field'>
                     <TextField label="Nome" variant="filled" type='text' required  onChange={(e) => setName(e.target.value)} 
                         InputProps={{

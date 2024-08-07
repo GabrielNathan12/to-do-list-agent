@@ -12,7 +12,7 @@
     background: linear-gradient(to bottom, #932B2B, #3D2244, #000000);
     z-index: 1000;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 .navbar-icon {
