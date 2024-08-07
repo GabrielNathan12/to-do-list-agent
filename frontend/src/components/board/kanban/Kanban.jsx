@@ -3,13 +3,15 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { Navbar } from "../navbar/Navbar";
-import { fetchAllTasks, updateTask } from "../../../services/tasks/tasks";
+import { fetchAllTasks, updateTask, createTask, deleteTask } from "../../../services/tasks/tasks";
 import { verifyToken } from '../../../services/users/users';
 import { fetchProjectById, updateProject } from "../../../services/projects/projects";
 import { MdAddCircleOutline, MdOutlineDeleteSweep } from "react-icons/md";
-import { HiOutlineFolderAdd } from "react-icons/hi";
+import { FiDelete } from "react-icons/fi";
 import { IoAdd } from "react-icons/io5";
 import { Button, TextField } from '@mui/material';
+import { Checkbox, IconButton } from '@mui/material';
+import { CheckCircle, Cancel } from '@mui/icons-material'; 
 import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
@@ -18,12 +20,15 @@ export const Kanban = () => {
     const { id: kanbanId } = useParams();
     const navigate = useNavigate();
     const [modalOpen, setModalOpen] = useState(false);
+    const [modalTaskOpen, setModalTaskOpen] = useState(false);
     const [project, setProject] = useState(null);
     const [tasks, setTasks] = useState([]);
     const [columns, setColumns] = useState([]);
     const [column, setColumn] = useState("");
     const [editingColumnIndex, setEditingColumnIndex] = useState(null);
     const [newColumnName, setNewColumnName] = useState("");
+    const [newTask, setNewTask] = useState({ title: "", description: "", columnIndex: null });
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
         const fetchTasksAndProject = async () => {
@@ -61,7 +66,24 @@ export const Kanban = () => {
     const getTasksForColumn = (columnIndex) => {
         return tasks.filter(task => task.column === columnIndex);
     };
+    const handleUpdateWindow = async () => {
+        const userEmail = localStorage.getItem('email');
 
+
+        try {
+            const tasksResponse = await fetchAllTasks();
+            const filteredTasks = tasksResponse.data.filter(task => 
+                task.user_email === userEmail && task.project_id === kanbanId
+            );
+            setTasks(filteredTasks);
+
+            const projectResponse = await fetchProjectById(kanbanId);
+            setProject(projectResponse.data);
+            setColumns(projectResponse.data.columns || []);
+        } catch (error) {
+            console.error('Erro ao buscar tarefas ou projeto:', error);
+        }
+    };
     const handleOnDragEnd = async (result) => {
         const { destination, source, draggableId } = result;
         if (!destination) return;
@@ -162,6 +184,56 @@ export const Kanban = () => {
         }
     };
 
+    const handleAddTask = (columnIndex) => {
+        setNewTask({ title: "", description: "", columnIndex });
+        setModalTaskOpen(true);
+    };
+    
+    const handleTaskStatusChange = async (idTask, is_finihed)=> {
+
+    }
+    const handleSaveTask = async (event) => {
+        event.preventDefault();
+        const userEmail = localStorage.getItem('email');
+
+        const newTaskData = {
+            ...newTask,
+            column: newTask.columnIndex,
+            project_id: kanbanId,
+            user_email: userEmail
+        };
+
+        try {
+            const response = await createTask(
+                newTaskData.title,
+                newTaskData.column,
+                newTaskData.description,
+                newTaskData.is_finihed,
+                newTaskData.priority,
+                newTaskData.project_id,
+                newTaskData.user_email
+            );
+            setTasks([...tasks, response.data]);
+            setModalTaskOpen(false);
+            setNewTask({ title: "", description: "", columnIndex: null });
+            await handleUpdateWindow()
+            setErrors({});
+        } catch (error) {
+            console.error('Erro ao adicionar a tarefa:', error);
+            if (error.response && error.response.data) {
+                setErrors(error.response.data);
+            }
+        }
+    };
+    const handleDeleteTasks = async (idTask) => {
+        try {
+            await deleteTask(idTask)
+            await handleUpdateWindow()            
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
     return (
         <div className="dashboard-container">
             <div className="dashboard-content">
@@ -176,7 +248,7 @@ export const Kanban = () => {
                 </div>
                 <DragDropContext onDragEnd={handleOnDragEnd}>
                     <div className="kanban-board">
-                        {columns.map((column, index) => (
+                        {columns.length > 0 && columns.map((column, index) => (
                             <Droppable key={index} droppableId={index.toString()}>
                                 {(provided) => (
                                     <div
@@ -203,7 +275,7 @@ export const Kanban = () => {
                                             )}
                                         </div>
                                         {getTasksForColumn(index).map((task, taskIndex) => (
-                                            <Draggable key={task.id} draggableId={task.id.toString()} index={taskIndex}>
+                                            <Draggable key={task.id} draggableId={task.id ? task.id.toString() : `task-${taskIndex}`} index={taskIndex}>
                                                 {(provided) => (
                                                     <div
                                                         className="kanban-task"
@@ -211,14 +283,20 @@ export const Kanban = () => {
                                                         {...provided.draggableProps}
                                                         {...provided.dragHandleProps}
                                                     >
-                                                        <HiOutlineFolderAdd className='icon-edit'/>
+                                                    <Checkbox
+                                                        checked={task.is_finihed}
+                                                        onChange={(e) => handleTaskStatusChange(task.id, e.target.checked)}
+                                                        icon={<Cancel />} // Ícone para não concluído
+                                                        checkedIcon={<CheckCircle />} // Ícone para concluído
+                                                    />
+                                                        <FiDelete className='icon-edit' onClick={() => handleDeleteTasks(task.id)}/>
                                                         <h3>{task.title}</h3>
                                                         <p>{task.description}</p>
                                                     </div>
                                                 )}
                                             </Draggable>
                                         ))}
-                                        <IoAdd className="add-task-icon"/>
+                                        <IoAdd className="add-task-icon" onClick={() => handleAddTask(index)} />
                                         {provided.placeholder}
                                     </div>
                                 )}
@@ -226,17 +304,40 @@ export const Kanban = () => {
                         ))}
                     </div>
                 </DragDropContext>
+                <Modal isOpen={modalOpen} onRequestClose={() => setModalOpen(false)}>
+                    <form onSubmit={handleAddColumn}>
+                        <h2>Adicionar Nova Coluna</h2>
+                        <TextField
+                            label="Nome da Coluna"
+                            value={column}
+                            onChange={(e) => setColumn(e.target.value)}
+                            fullWidth
+                            margin="normal"
+                        />
+                        <Button type="submit" variant="contained" color="primary">Adicionar</Button>
+                    </form>
+                </Modal>
+                <Modal isOpen={modalTaskOpen} onRequestClose={() => setModalTaskOpen(false)}>
+                    <form onSubmit={handleSaveTask}>
+                        <h2>Adicionar Nova Tarefa</h2>
+                        <TextField
+                            label="Título da Tarefa"
+                            value={newTask.title}
+                            onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+                            fullWidth
+                            margin="normal"
+                        />
+                        <TextField
+                            label="Descrição"
+                            value={newTask.description}
+                            onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
+                            fullWidth
+                            margin="normal"
+                        />
+                        <Button type="submit" variant="contained" color="primary">Adicionar</Button>
+                    </form>
+                </Modal>
             </div>
-            <Modal isOpen={modalOpen} onRequestClose={() => setModalOpen(false)} contentLabel="Adicionar Nova Coluna" className="modal" overlayClassName="modal-overlay" >
-                <form onSubmit={handleAddColumn}>
-                    <label>
-                        Nome da Coluna:
-                        <TextField type="text" value={column} onChange={(e) => setColumn(e.target.value)} required fullWidth/>
-                    </label>
-                    <Button type="submit">Adicionar</Button>
-                    <Button type="button" onClick={() => setModalOpen(false)}>Cancelar</Button>
-                </form>
-            </Modal>
         </div>
     );
 };

@@ -17,3 +17,21 @@ export const updateTask = (id, title, column, description, created_date, is_fini
             "user_email": user_email
     })
 }
+
+export const createTask = (title, column, description, is_finihed, priority, project_id, user_email) => {
+    return apiTasks.post('', {
+            "title": title,
+            "column": column,
+            "description": description,
+            "is_finihed": is_finihed,
+            "priority": priority,
+            "project_id": project_id,
+            "user_email": user_email
+    })
+}
+
+export const deleteTask = (idTask) => {
+    return apiTasks.delete('', {
+        data: {id: idTask}
+    })
+}
