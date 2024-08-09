@@ -24,3 +24,11 @@ export const updateProject = (id, title, user_email, columns) => {
         "columns": columns
     })
 }
+
+export const deleteProject = (id) => {
+    return apiProjects.delete('', {
+        data: {
+            "id": id
+        }
+    })
+}

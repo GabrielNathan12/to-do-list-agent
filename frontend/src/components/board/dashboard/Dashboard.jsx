@@ -3,7 +3,7 @@ import './Dashboard.css'
 import { Navbar } from '../navbar/Navbar';
 import { Link, useNavigate } from 'react-router-dom';
 import { verifyToken } from '../../../services/users/users';
-import { addNewProject, fetchAllProjects } from '../../../services/projects/projects';
+import { addNewProject, deleteProject, fetchAllProjects, updateProject } from '../../../services/projects/projects';
 import { MdAddCircleOutline } from "react-icons/md";
 import Modal from 'react-modal'
 import { Alert, Button, TextField } from '@mui/material'
@@ -16,8 +16,11 @@ export const Dashboard = () => {
     const navigate = useNavigate()
     const [projects, setProjects] = useState([]) 
     const [modalOpen, setModalOpen] = useState(false)
+    const [modalEditOpen, setModalEditOpen] = useState(false)
     const [successMessage, setSuccessMessage] = useState("")
     const [title, setTitle] = useState("")
+    const [editTitle, setEditTitle] = useState("") 
+    const [currentProject, setCurrentProject] = useState(null)
     const [errorMessage, setErrorMessage] = useState("")
 
     useEffect(() => {
@@ -73,6 +76,7 @@ export const Dashboard = () => {
             setProjects([])
         }
     }
+
     const handleAddProject = async (event) => {
         event.preventDefault()
         const email = localStorage.getItem('email')
@@ -101,11 +105,57 @@ export const Dashboard = () => {
             setSuccessMessage("")
         }
     }
-    const handleUpdateProject = async (project) => {
 
+    const handleOpenEditModal = (project) => {
+        setCurrentProject(project)
+        setEditTitle(project.title) 
+        setModalEditOpen(true)
     }
-    const handleDeleteProject = (id) => {
 
+    const handleEditProject = async (event) => {
+        event.preventDefault()
+
+        try {
+            await updateProject(currentProject.id,  editTitle , currentProject.user_email, currentProject.columns)
+            setModalEditOpen(false)
+            setSuccessMessage("Projeto atualizado")
+            setErrorMessage("")
+            
+            setTimeout(() => {
+                setSuccessMessage("")
+            }, 2000)
+
+            await updatePage()
+        } catch (error) {
+            setErrorMessage("Erro ao atualizar o projeto")
+            
+            setTimeout(() => {
+                setErrorMessage("")
+            }, 2000)
+
+            setSuccessMessage("")
+        }
+    }
+
+    const handleDeleteProject = async (id) => {
+        try {
+            await deleteProject(id)
+            setSuccessMessage("Projeto Deletado")
+            setErrorMessage("")
+            setTimeout(() => {
+                setSuccessMessage("")
+            }, 2000)
+            await updatePage()
+
+        } catch (error) {
+            setErrorMessage("Por favor, verifique os campos")
+            
+            setTimeout(() => {
+                setErrorMessage("")
+            }, 2000)
+
+            setSuccessMessage("")
+        }
     }
 
     return (
@@ -123,7 +173,7 @@ export const Dashboard = () => {
                 <div className='projects-container'>
                     {projects.map(project => (
                         <div key={project.id} className="project">
-                            <LuFolderEdit className='icon-edit'  onClick={() => handleUpdateProject(project)}/>
+                            <LuFolderEdit className='icon-edit'  onClick={() => handleOpenEditModal(project)}/>
                             <FiDelete className='icon-edit' onClick={() => handleDeleteProject(project.id)}/>
                             <Link to={`/kanban/${project.id}`}>
                                 <p>{project.title}</p>
@@ -136,6 +186,13 @@ export const Dashboard = () => {
                         <TextField type='text' label="Nome do projeto" value={title} variant="filled" onChange={(e) => setTitle(e.target.value)} required fullWidth />
                         <Button type='submit'>Adicionar</Button>
                         <Button type='button' onClick={() => setModalOpen(false)}>Cancelar</Button>
+                    </form>
+                </Modal>
+                <Modal isOpen={modalEditOpen} onRequestClose={() => setModalEditOpen(false)} contentLabel='Editar Projeto' className="modal" overlayClassName="modal-overlay">
+                    <form onSubmit={handleEditProject}>
+                        <TextField type='text' label="Nome do projeto" value={editTitle} variant="filled" onChange={(e) => setEditTitle(e.target.value)} required fullWidth />
+                        <Button type='submit'>Salvar</Button>
+                        <Button type='button' onClick={() => setModalEditOpen(false)}>Cancelar</Button>
                     </form>
                 </Modal>
             </div>
