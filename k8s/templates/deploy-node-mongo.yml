@@ -21,10 +21,7 @@ spec:
         - containerPort: 3000
         env:
         - name: ME_CONFIG_MONGODB_URL
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Release.Name }}-secrets
-              key: ME_CONFIG_MONGODB_URL
+          value: mongodb://{{ .Release.Name }}-mongodb-service:27017/db
         - name: MONGO_DB_PORT
           valueFrom:
             secretKeyRef:

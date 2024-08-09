@@ -8,8 +8,8 @@ class TasksSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate_title(self, value):
-        if len(value) > 30:
-            raise serializers.ValidationError('O título não pode ter mais de 10 caracteres.')
+        if len(value) > 100:
+            raise serializers.ValidationError('O título não pode ter mais de 100 caracteres.')
         return value
     
     def validate_id(self, value):

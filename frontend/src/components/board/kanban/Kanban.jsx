@@ -400,8 +400,21 @@ export const Kanban = () => {
             await handleUpdateWindow()
             setModalEditTaskOpen(false)
             setEditTask(null)
+            setSuccessMessage("Tarefa atualizada")
+            setErrorMessage("")
+            setTimeout(() => {
+                setSuccessMessage("")
+            }, 2000)
+
         } catch (error) {
             console.error('Erro ao editar a tarefa:', error)
+            console.log(error)
+            setErrorMessage("Por favor, verifique os campos")
+            setTimeout(() => {
+                setErrorMessage("")
+            }, 2000)
+
+            setSuccessMessage("")
         }
     }
     return (
@@ -467,27 +480,27 @@ export const Kanban = () => {
                         ))}
                     </div>
                 </DragDropContext>
-                <Modal isOpen={modalOpen} onRequestClose={() => setModalOpen(false)}>
+                <Modal isOpen={modalOpen} onRequestClose={() => setModalOpen(false)} className="modal" overlayClassName="modal-overlay">
                     <form onSubmit={handleAddColumn}>
                         <h2>Adicionar Nova Coluna</h2>
                         <TextField label="Nome da Coluna" value={column} onChange={(e) => setColumn(e.target.value)} fullWidth margin="normal" />
                         <Button type="submit" variant="contained" color="primary">Adicionar</Button>
                     </form>
                 </Modal>
-                <Modal isOpen={modalTaskOpen} onRequestClose={() => setModalTaskOpen(false)}>
+                <Modal isOpen={modalTaskOpen} onRequestClose={() => setModalTaskOpen(false)} className="modal" overlayClassName="modal-overlay">
                     <form onSubmit={handleSaveTask}>
                         <h2>Adicionar Nova Tarefa</h2>
-                        <TextField label="Título da Tarefa" value={newTask.title} onChange={(e) => setNewTask({ ...newTask, title: e.target.value })} fullWidth margin="normal" />
-                        <TextField label="Descrição" value={newTask.description} onChange={(e) => setNewTask({ ...newTask, description: e.target.value })} fullWidth margin="normal" />
+                        <TextField label="Título da Tarefa" value={newTask.title} onChange={(e) => setNewTask({ ...newTask, title: e.target.value })} fullWidth margin="normal" required/>
+                        <TextField label="Descrição" value={newTask.description} onChange={(e) => setNewTask({ ...newTask, description: e.target.value })} fullWidth margin="normal" required/>
                         <Button type="submit" variant="contained" color="primary">Adicionar</Button>
                     </form>
                 </Modal>
                 <Modal isOpen={modalEditTaskOpen} onRequestClose={() => setModalEditTaskOpen(false)} contentLabel="Editar Tarefa" >
-                <h2>Editar Tarefa</h2>
                 <form onSubmit={handleEditTask}>
-                    <TextField label="Título" value={editTask?.title || ""} onChange={(e) => setEditTask({ ...editTask, title: e.target.value })} fullWidth />
-                    <TextField label="Descrição" value={editTask?.description || ""} onChange={(e) => setEditTask({ ...editTask, description: e.target.value })} fullWidth multiline rows={4} />
-                    <FormControl fullWidth>
+                    <h2>Editar Tarefa</h2>
+                    <TextField label="Título" value={editTask?.title || ""} onChange={(e) => setEditTask({ ...editTask, title: e.target.value })} fullWidth required/>
+                    <TextField label="Descrição" value={editTask?.description || ""} onChange={(e) => setEditTask({ ...editTask, description: e.target.value })} multiline rows={4} fullWidth required/>
+                    <FormControl>
                         <InputLabel>Prioridade</InputLabel>
                         <Select value={priority} onChange={(e) => setPriority(e.target.value)} >
                             <MenuItem value="urgent">Urgente</MenuItem>

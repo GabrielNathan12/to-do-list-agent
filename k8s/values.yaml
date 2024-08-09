@@ -22,12 +22,12 @@ mysqldb:
 djangomysql:
   name: django-mysql
   image: gabrielnathan/projects
-  tag: 1.0.5
+  tag: 1.0.6
 
 djangopgsql:
   name: django-pgsql
   image: gabrielnathan/tasks
-  tag: 1.0.3
+  tag: 1.0.5
 
 nodejs:
   name: nodejs
@@ -40,7 +40,6 @@ service:
 replicas: 1
 
 secrets:
-  mongodb_url: bW9uZ29kYjovL2RlbW8tbW9uZ29kYi1zZXJ2aWNlOjI3MDE3L2Ri
   mongodb_port: MjcwMTc=
   jwt_secret: MmRzamtkYXMwOWRzYTkwZGFqa2FzZGFta3NAISQlJWFkMDk4OW5rLTIzJCQhQA==
   
@@ -55,7 +54,6 @@ secrets:
   
   cors_allowed_origins: aHR0cDovL2xvY2FsaG9zdDozMDAw
   django_engine_pgsql: ZGphbmdvLmRiLmJhY2tlbmRzLnBvc3RncmVzcWw=
-  django_host_pgsql: ZGVtby1wZ3NxbC1zZXJ2aWNl
   django_port_pgsql: NTQzMg==
   django_secret_key_pgsql: ZGphbmdvLWluc2VjdXJlLW0ocW1yZTVnJDBvbiVzNW5fdmFeODBnZXFnMmE0d14kMl9vKngwKjhiZXd5d0BkeC0t
   django_debug_pgsql: MQ==
@@ -65,7 +63,6 @@ secrets:
   open_ai_key: c2stcHJvai1QemFTSjRYR0hCUFhDZFFvcUczelQzQmxia0ZKbDNtWHBLWTFydkNXRWI0SUlTUEg=
   
   django_engine_mysql: ZGphbmdvLmRiLmJhY2tlbmRzLm15c3Fs
-  django_host_mysql: ZGVtby1teXNxbC1zZXJ2aWNl
   django_port_mysql: MzMwNg==
   django_secret_key_mysql: ZGphbmdvLWluc2VjdXJlLW0ocW1yZTVnJDBvbiVzNW5fdmFeODBnZXFnMmE0d14kMl9vKngwKjhiZXd5d0BkeC0t
   django_debug_mysql: MQ==
