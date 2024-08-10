@@ -2,6 +2,7 @@ html,body{
     height: 100%;
     margin: 0;
     background: linear-gradient(to bottom, #932B2B, #3D2244, #000000);
+    overflow-x: hidden;
     display: grid;
     place-items: center;
 }
@@ -36,4 +37,26 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background-color: #860d0d;
     transform: scale(1.04);
+}
+
+@media (max-width: 768px) {
+    form {
+        padding: 20px;
+        max-width: 90%;
+    }
+
+    button {
+        padding: 10px 0; 
+    }
+}
+
+@media (max-width: 480px) {
+    html, body {
+        display: block;
+    }
+
+    form {
+        font-size: 16px; 
+        padding: 15px;
+    }
 }

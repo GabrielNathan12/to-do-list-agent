@@ -173,8 +173,10 @@ export const Dashboard = () => {
                 <div className='projects-container'>
                     {projects.map(project => (
                         <div key={project.id} className="project">
-                            <LuFolderEdit className='icon-edit'  onClick={() => handleOpenEditModal(project)}/>
-                            <FiDelete className='icon-edit' onClick={() => handleDeleteProject(project.id)}/>
+                            <div className='icon-container'>
+                                <LuFolderEdit className='icon-edit'  onClick={() => handleOpenEditModal(project)}/>
+                                <FiDelete className='icon-delete' onClick={() => handleDeleteProject(project.id)}/>
+                            </div>
                             <Link to={`/kanban/${project.id}`}>
                                 <p>{project.title}</p>
                             </Link>
@@ -190,7 +192,7 @@ export const Dashboard = () => {
                 </Modal>
                 <Modal isOpen={modalEditOpen} onRequestClose={() => setModalEditOpen(false)} contentLabel='Editar Projeto' className="modal" overlayClassName="modal-overlay">
                     <form onSubmit={handleEditProject}>
-                        <TextField type='text' label="Nome do projeto" value={editTitle} variant="filled" onChange={(e) => setEditTitle(e.target.value)} required fullWidth />
+                        <TextField type='text' label="Nome do projeto" value={editTitle} variant="outlined" onChange={(e) => setEditTitle(e.target.value)} required fullWidth />
                         <Button type='submit'>Salvar</Button>
                         <Button type='button' onClick={() => setModalEditOpen(false)}>Cancelar</Button>
                     </form>

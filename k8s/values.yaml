@@ -51,7 +51,7 @@ secrets:
   mysql_user: Z2FicmllbA==
   mysql_user_password: Z2FicmllbDEyMw==
   mysql_db: cHJvamVjdHNfa2FuYmFu
-  
+  # aHR0cDovLzE5Mi4xNjguNDkuMjozMDA4MA==
   cors_allowed_origins: aHR0cDovL2xvY2FsaG9zdDozMDAw
   django_engine_pgsql: ZGphbmdvLmRiLmJhY2tlbmRzLnBvc3RncmVzcWw=
   django_port_pgsql: NTQzMg==

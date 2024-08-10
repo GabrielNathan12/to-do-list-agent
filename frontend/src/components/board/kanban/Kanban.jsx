@@ -32,7 +32,7 @@ export const Kanban = () => {
     const [editingColumnIndex, setEditingColumnIndex] = useState(null)
     const [newColumnName, setNewColumnName] = useState("")
     const [newTask, setNewTask] = useState({ title: "", description: "", columnIndex: null })
-    const [errors, setErrors] = useState({})
+    const [ , setErrors] = useState({})
     const [modalEditTaskOpen, setModalEditTaskOpen] = useState(false)
     const [editTask, setEditTask] = useState(null)
     const [priority, setPriority] = useState('')
@@ -76,13 +76,13 @@ export const Kanban = () => {
     const getPriorityColor = (priority) => {
         switch (priority) {
             case 'urgent':
-                return '#FF6F61'
+                return '#B22222'
             case 'high':
-                return '#FFA07A'
+                return '#FF8C00'
             case 'average':
-                return '#FFD700'
+                return '#B0E0E6'
             case 'no_priority':
-                return '#D3D3D3'
+                return '#F0FFF0'
             default:
                 return '#FFFFFF' 
         }
@@ -421,14 +421,13 @@ export const Kanban = () => {
         <div className="dashboard-container">
             <div className="dashboard-content">
                 <Navbar />
-                <Navbar />
                 <div className="alert-container">
                     {successMessage && <Alert severity="success">{successMessage}</Alert>}
                     {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
                 </div>
                 {project && (
-                    <div>
-                        <h1>{project.title}</h1>
+                    <div className="title-dashboard">
+                        <h3>{project.title}</h3>
                     </div>
                 )}
 
@@ -458,17 +457,18 @@ export const Kanban = () => {
                                                         style={{
                                                             ...provided.draggableProps.style,
                                                             backgroundColor: getPriorityColor(task.priority)
-                                                        }}
-                                                    >
-                        
-                                                        <BpCheckbox checked={task.is_finihed} onClick={(e) => handleTaskStatusChange(task, e.target.checked)}/>
-                                                        <FiDelete className='icon-edit' onClick={() => handleDeleteTasks(task.id)}/>
-                                                        <div onClick={() => openEditTaskModal(task)}>
-                                                            <h3>{task.title}</h3>
-                                                            <p>{task.description}</p>
+                                                        }}>
+                                                        <div className="kanban-task-header">
+                                                            <BpCheckbox checked={task.is_finihed} onClick={(e) => handleTaskStatusChange(task, e.target.checked)}/>
+                                                            <FiDelete className='icon-delete-task' onClick={() => handleDeleteTasks(task.id)}/>
+                                                        </div>
+                                                        <div className="kanban-task-body">
+                                                            <div onClick={() => openEditTaskModal(task)}>
+                                                                <h3>{task.title}</h3>
+                                                                <p>{task.description}</p>
+                                                            </div>
                                                         </div>
                                                     </div>
-
                                                 )}
                                             </Draggable>
                                         ))}
@@ -495,41 +495,44 @@ export const Kanban = () => {
                         <Button type="submit" variant="contained" color="primary">Adicionar</Button>
                     </form>
                 </Modal>
-                <Modal isOpen={modalEditTaskOpen} onRequestClose={() => setModalEditTaskOpen(false)} contentLabel="Editar Tarefa" >
-                <form onSubmit={handleEditTask}>
-                    <h2>Editar Tarefa</h2>
-                    <TextField label="Título" value={editTask?.title || ""} onChange={(e) => setEditTask({ ...editTask, title: e.target.value })} fullWidth required/>
-                    <TextField label="Descrição" value={editTask?.description || ""} onChange={(e) => setEditTask({ ...editTask, description: e.target.value })} multiline rows={4} fullWidth required/>
-                    <FormControl>
-                        <InputLabel>Prioridade</InputLabel>
-                        <Select value={priority} onChange={(e) => setPriority(e.target.value)} >
-                            <MenuItem value="urgent">Urgente</MenuItem>
-                            <MenuItem value="high">Alta</MenuItem>
-                            <MenuItem value="average">Média</MenuItem>
-                            <MenuItem value="no_priority">Sem Prioridade</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <Button type="submit" variant="contained" color="primary">
-                        Salvar
-                    </Button>
-                    <Button variant="contained" color="secondary" onClick={handleResponseAi}>
-                        <h3>Obter Soluções da IA <RiRobot2Line/> </h3>
-                    </Button>
-                </form>
-                {responseAi.length > 0 && (
-                    <div className="solutions-container">
-                        <h3>Soluções Sugeridas</h3>
-                        <ul>
-                            {responseAi.map((solução, index) => (
-                                <li key={index}>
-                                    <h4>{solução.etapa}</h4>
-                                    <p>{solução.descrição}</p>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                )}
-            </Modal>
+                <Modal isOpen={modalEditTaskOpen} onRequestClose={() => setModalEditTaskOpen(false)} contentLabel="Editar Tarefa"  className="modal" overlayClassName="modal-overlay">
+                    <form onSubmit={handleEditTask}>
+                        <h2>Editar Tarefa</h2>
+                        <TextField label="Título" value={editTask?.title || ""} onChange={(e) => setEditTask({ ...editTask, title: e.target.value })} fullWidth required/>
+                        <TextField label="Descrição" value={editTask?.description || ""} onChange={(e) => setEditTask({ ...editTask, description: e.target.value })} multiline rows={4} fullWidth required/>
+                        <FormControl variant="standard" sx={{ m: 1, minWidth: 120 }} fullWidth>
+                            <InputLabel>Prioridade</InputLabel>
+                            <Select value={priority} onChange={(e) => setPriority(e.target.value)} fullWidth>
+                                <MenuItem value="urgent">Urgente</MenuItem>
+                                <MenuItem value="high">Alta</MenuItem>
+                                <MenuItem value="average">Média</MenuItem>
+                                <MenuItem value="no_priority">Sem Prioridade</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <Button type="submit" variant="contained" color="primary">
+                            Salvar
+                        </Button>
+                        <Button type='button' onClick={() => setModalEditTaskOpen(false)}>Cancelar</Button>
+                        <div className="botton-ai">
+                        <Button variant="contained" color="secondary" onClick={handleResponseAi}>
+                            <h3>Obter Soluções da IA <RiRobot2Line/> </h3>   
+                        </Button>
+                        </div>
+                    </form>
+                    {responseAi.length > 0 && (
+                        <div className="solutions-container">
+                            <h3>Soluções Sugeridas</h3>
+                            <ul>
+                                {responseAi.map((solução, index) => (
+                                    <li key={index}>
+                                        <h4>{solução.etapa}</h4>
+                                        <p>{solução.descrição}</p>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
+                </Modal>
             </div>
         </div>
     )
