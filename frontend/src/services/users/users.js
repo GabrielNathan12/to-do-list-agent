@@ -1,17 +1,18 @@
 import { apiUsers } from '../api/api'
 
 export const login = (email, password) => {
-    return apiUsers.post('/login', {
-        "email": email,
-        "password": password
-    })
+  return apiUsers.post('/login', {
+    "email": email,
+    "password": password
+  })
 }
+
 export const register = (name, email, password) => {
-    return apiUsers.post('', {
-        "name": name,
-        "email": email,
-        "password": password
-    })
+  return apiUsers.post('', {
+    "name": name,
+    "email": email,
+    "password": password
+  })
 }
 export const verifyToken = async (token) => {
     try {
@@ -27,4 +28,20 @@ export const verifyToken = async (token) => {
       }
       throw error;
     }
-  };
+};
+
+export const fetchAllUsers = async () => {
+  return apiUsers.get('')
+}
+
+export const updateUser = async (id, name, email, password) => {
+  return apiUsers.put(`/${id}`, {
+    "name": name, 
+    "email": email,
+    "password": password
+  })
+}
+
+export const deleteUser = async (id) => {
+  return apiUsers.delete(`/${id}`)
+}

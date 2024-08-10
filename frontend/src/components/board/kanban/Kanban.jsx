@@ -370,7 +370,7 @@ export const Kanban = () => {
             setErrorMessage("")
             setTimeout(() => {
                 setSuccessMessage("")
-            }, 2000)
+            }, 3500)
 
         } catch (error) {
             console.log(error)
