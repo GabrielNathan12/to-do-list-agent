@@ -3,10 +3,16 @@ kind: Ingress
 metadata:
   name: {{ .Release.Name }}-deploy-ingress
   annotations:
-
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    cert-manager.io/cluster-issuer: {{ .Release.Name }}-letsencrypt
 spec:
+  tls:
+  - hosts:
+    - homolog.192.168.49.2.nip.io
+    secretName: {{ .Release.Name }}-letsencrypt
   rules:
-  - http:
+  - host: homolog.192.168.49.2.nip.io
+    http:
       paths:
       - pathType: Prefix
         path: "/ai"

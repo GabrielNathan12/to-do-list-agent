@@ -17,7 +17,12 @@ app.use('/users', userRoutes);
 
 const PORT = process.env.PORT || 3000;
 
-mongoose.connect(mongoUri as string)
+const mongooseOptions = {
+  serverSelectionTimeoutMS: 50000,
+  connectTimeoutMS: 100000, 
+};
+
+mongoose.connect(mongoUri as string, mongooseOptions)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('Erro ao conectar ao MongoDB:', err));
 

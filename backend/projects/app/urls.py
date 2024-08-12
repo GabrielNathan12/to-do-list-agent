@@ -19,4 +19,5 @@ from app.views import ProjectView
 
 urlpatterns = [
     path('', ProjectView.as_view()),
+    path('<uuid:id>/', ProjectView.as_view()),
 ]

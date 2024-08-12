@@ -22,7 +22,10 @@ export const Login = () => {
             setErrorMessage('')
 
             const token = response.data.token
+
             localStorage.setItem('token', token)
+            localStorage.setItem('email', email)
+            
             setTimeout(() => {
                 navigate('/dashboard')
             }, 2000)
@@ -38,8 +41,10 @@ export const Login = () => {
                 <div className="user-icon">
                     <FaRegUserCircle/>
                 </div>
-                {successMessage && <Alert severity="success">{successMessage}</Alert>}
-                {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+                <div className="alert-container">
+                    {successMessage && <Alert severity="success">{successMessage}</Alert>}
+                    {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+                </div>
                 <div className="input-field">
                     <TextField label="E-mail" variant="filled" type='email' required onChange={(e) => setEmail(e.target.value)} InputProps={{
                         disableUnderline: true,

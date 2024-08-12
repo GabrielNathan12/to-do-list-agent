@@ -10,6 +10,8 @@ class Tasks(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     is_finihed = models.BooleanField(default=False)
     priority = models.CharField(max_length=20, default='no_priority')
-
+    project_id = models.UUIDField(blank=False, null=False)
+    user_email = models.EmailField(blank=False, null=False)
+    
     def __str__(self) -> str:
         return self.title

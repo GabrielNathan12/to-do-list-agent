@@ -1,6 +1,5 @@
 from app.models import Tasks
 
-
 class TasksServices:
     @staticmethod
     def create_task(data):

@@ -1,3 +1,12 @@
+frontend:
+  name: frontend-deploy
+  image: gabrielnathan/frontend
+  namespace: frontend
+  tag: 1.0.5
+  service: NodePort
+  replicas: 1
+
+
 mongodb:
   name: mongo
   image: mongo
@@ -22,17 +31,17 @@ mysqldb:
 djangomysql:
   name: django-mysql
   image: gabrielnathan/projects
-  tag: 1.0.0
+  tag: 1.0.6
 
 djangopgsql:
   name: django-pgsql
   image: gabrielnathan/tasks
-  tag: 1.0.1
+  tag: 1.0.5
 
 nodejs:
   name: nodejs
   image: gabrielnathan/users
-  tag: 1.0.4
+  tag: 1.0.7
 
 service:
   type: ClusterIP
@@ -40,7 +49,11 @@ service:
 replicas: 1
 
 secrets:
-  mongodb_url: bW9uZ29kYjovL2RlbW8tbW9uZ29kYi1zZXJ2aWNlOjI3MDE3L2Ri
+  url_users: aHR0cDovLzE5Mi4xNjguNDkuMi91c2Vycw==
+  url_projects: aHR0cDovLzE5Mi4xNjguNDkuMg==
+  url_tasks: aHR0cDovLzE5Mi4xNjguNDkuMi90YXNrcy8=
+  url_ai: aHR0cDovLzE5Mi4xNjguNDkuMi9haS8=
+  
   mongodb_port: MjcwMTc=
   jwt_secret: MmRzamtkYXMwOWRzYTkwZGFqa2FzZGFta3NAISQlJWFkMDk4OW5rLTIzJCQhQA==
   
@@ -52,24 +65,23 @@ secrets:
   mysql_user: Z2FicmllbA==
   mysql_user_password: Z2FicmllbDEyMw==
   mysql_db: cHJvamVjdHNfa2FuYmFu
-  
-  cors_allowed_origins: aHR0cDovL2xvY2FsaG9zdDozMDAw
+  # aHR0cDovLzE5Mi4xNjguNDkuMjozMDA4MA==
+  # aHR0cDovL2xvY2FsaG9zdDozMDAw
+  cors_allowed_origins: aHR0cDovLzE5Mi4xNjguNDkuMjozMDA4MA==
   django_engine_pgsql: ZGphbmdvLmRiLmJhY2tlbmRzLnBvc3RncmVzcWw=
-  django_host_pgsql: ZGVtby1wZ3NxbC1zZXJ2aWNl
   django_port_pgsql: NTQzMg==
   django_secret_key_pgsql: ZGphbmdvLWluc2VjdXJlLW0ocW1yZTVnJDBvbiVzNW5fdmFeODBnZXFnMmE0d14kMl9vKngwKjhiZXd5d0BkeC0t
   django_debug_pgsql: MQ==
-  django_allowed_hosts_pgsql: bG9jYWxob3N0LDEyNy4wLjAuMSxbOjoxXSwwLjAuMC4wLCAxOTIuMTY4LjQ5LjI=
+  django_allowed_hosts_pgsql: bG9jYWxob3N0LDEyNy4wLjAuMSxbOjoxXSwwLjAuMC4wLCAxOTIuMTY4LjQ5LjIsaG9tb2xvZy4xOTIuMTY4LjQ5LjIubmlwLmlv
   
   open_ai_model: Z3B0LTRvLW1pbmk=
   open_ai_key: c2stcHJvai1QemFTSjRYR0hCUFhDZFFvcUczelQzQmxia0ZKbDNtWHBLWTFydkNXRWI0SUlTUEg=
   
   django_engine_mysql: ZGphbmdvLmRiLmJhY2tlbmRzLm15c3Fs
-  django_host_mysql: ZGVtby1teXNxbC1zZXJ2aWNl
   django_port_mysql: MzMwNg==
   django_secret_key_mysql: ZGphbmdvLWluc2VjdXJlLW0ocW1yZTVnJDBvbiVzNW5fdmFeODBnZXFnMmE0d14kMl9vKngwKjhiZXd5d0BkeC0t
   django_debug_mysql: MQ==
-  django_allowed_hosts_mysql: bG9jYWxob3N0LDEyNy4wLjAuMSxbOjoxXSwwLjAuMC4wLCAxOTIuMTY4LjQ5LjI=
+  django_allowed_hosts_mysql: bG9jYWxob3N0LDEyNy4wLjAuMSxbOjoxXSwwLjAuMC4wLCAxOTIuMTY4LjQ5LjIsaG9tb2xvZy4xOTIuMTY4LjQ5LjIubmlwLmlv
 
 volumes:
   names: 
@@ -77,3 +89,6 @@ volumes:
     volume_pgsql: pgsql-storage
     volume_mongo: mongo-storage
   storage: 1Mi
+
+  #minikube service demo-frontend-service --url
+  #kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.15.2/cert-manager.yaml

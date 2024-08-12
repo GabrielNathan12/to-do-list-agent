@@ -8,7 +8,9 @@ const userController = new UserController()
 router.get('/', (request: Request, response:Response) => {
     userController.get_all_users(request, response)
 });
-
+router.get('/:id', (request: Request, response:Response) => {
+    userController.get_user_by_id(request, response)
+});
 router.post('/', (request: Request, response: Response) => {
     userController.create_new_user(request, response);
 });

@@ -19,7 +19,21 @@ export class UserController{
             return response.status(400).json({'error': error})
         }
     }
-
+    public async get_user_by_id(request: Request, response: Response) {
+        try {
+            const { id } = request.params
+            const user = await this.userService.find_by_id(id)
+    
+            if (!user) {
+                return response.status(404).json({ message: 'User not found' })
+            }
+    
+            return response.status(200).json(user)
+        } catch (error: any) {
+            return response.status(500).json({ message: error.message })
+        }
+    }
+    
     public async create_new_user(request: Request, response: Response) {
         try {
             const { name, email, password, role } = request.body;
@@ -76,7 +90,7 @@ export class UserController{
                 return response.status(401).json({ message: 'Invalid credentials' });
             }
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET as string, { expiresIn: '1h' });
-            return response.status(200).json({ token });
+            return response.status(200).json({ "token": token, "email": user.email });
         }
         catch(error: any){
             return response.status(500).json({ message: error.message });

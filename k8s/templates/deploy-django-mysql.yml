@@ -41,10 +41,7 @@ spec:
               name: {{ .Release.Name }}-secrets
               key: MYSQL_PASSWORD
         - name: MYSQL_HOST
-          valueFrom:
-            secretKeyRef:
-              name: {{ .Release.Name }}-secrets
-              key: DB_HOST_MYSQL
+          value: {{.Release.Name }}-mysql-service
         - name: MYSQL_PORT
           valueFrom:
             secretKeyRef:
