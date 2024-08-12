@@ -32,6 +32,8 @@ jobs:
           sudo tar -C /usr/local -xzf go$GO_VERSION.linux-amd64.tar.gz
           rm go$GO_VERSION.linux-amd64.tar.gz
           echo "export PATH=\$PATH:/usr/local/go/bin" >> $GITHUB_ENV
+          source $GITHUB_ENV
+          go version
 
       - name: Install cri-dockerd
         run: |
@@ -39,7 +41,8 @@ jobs:
           git clone https://github.com/Mirantis/cri-dockerd.git
           cd cri-dockerd
           mkdir bin
-          /usr/local/go/bin/go build -o bin/cri-dockerd ./cmd/cri-dockerd
+          # Corrigir o caminho para o arquivo
+          /usr/local/go/bin/go build -o bin/cri-dockerd ./cmd/cri-dockerd/main.go
           sudo mkdir -p /usr/local/bin
           sudo install bin/cri-dockerd /usr/local/bin/
           sudo cp -a packaging/systemd/* /etc/systemd/system/
