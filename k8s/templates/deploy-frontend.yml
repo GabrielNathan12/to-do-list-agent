@@ -1,30 +1,42 @@
-# apiVersion: apps/v1
-# kind: Deployment
-# metadata:
-#   name: frontend-deploy
-#   labels:
-#     app: frontend-deploy
-# spec:
-#   replicas: 1
-#   selector:
-#     matchLabels:
-#       app: frontend-deploy
-#   template:
-#     metadata:
-#       labels:
-#         app: frontend-deploy
-#     spec:
-#       containers:
-#       - name: frontend-deploy
-#         image: gabrielnathan/frontend:1.0.0
-#         ports:
-#         - containerPort: 3000
-#         env:
-#         - name: REACT_APP_URL_SERVE_USER
-#           value: http://192.168.49.2/users
-#         - name: REACT_APP_URL_SERVE_PROJECTS
-#           value: http://192.168.49.2
-#         - name: REACT_APP_URL_SERVE_TASKS
-#           value: http://192.168.49.2/tasks/
-#         - name: REACT_APP_URL_SERVE_TASKS_AI
-#           value: http://192.168.49.2/ai/
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-frontend-deploy
+  labels:
+    app: {{ .Values.frontend.name }}
+spec:
+  replicas: {{ .Values.frontend.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.frontend.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.frontend.name }}
+    spec:
+      containers:
+      - name: {{ .Values.frontend.name }}
+        image: {{ .Values.frontend.image }}:{{ .Values.frontend.tag }}
+        ports:
+        - containerPort: 3000
+        env:
+        - name: REACT_APP_URL_SERVE_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: REACT_APP_URL_SERVE_USER
+        - name: REACT_APP_URL_SERVE_PROJECTS
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: REACT_APP_URL_SERVE_PROJECTS
+        - name: REACT_APP_URL_SERVE_TASKS
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: REACT_APP_URL_SERVE_TASKS
+        - name: REACT_APP_URL_SERVE_TASKS_AI
+          valueFrom:
+            secretKeyRef:
+              name: {{ .Release.Name }}-secrets
+              key: REACT_APP_URL_SERVE_TASKS_AI
