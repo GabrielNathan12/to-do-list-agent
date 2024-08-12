@@ -15,21 +15,29 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y curl apt-transport-https
-          sudo apt-get install -y conntrack
-          sudo apt-get install -y cri-tools
+          sudo apt-get install -y curl apt-transport-https conntrack
+
+      - name: Install crictl
+        run: |
+          VERSION="v1.26.0"  # Substitua pela versão desejada
+          curl -LO https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION/crictl-$VERSION-linux-amd64.tar.gz
+          sudo tar zxvf crictl-$VERSION-linux-amd64.tar.gz -C /usr/local/bin
+          rm crictl-$VERSION-linux-amd64.tar.gz
+          crictl --version
 
       - name: Set up Minikube
         run: |
           curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
           sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
-          minikube start --driver=none --memory=2048 --cpus=2
+          sudo minikube start --driver=none --memory=2048 --cpus=2
           minikube status
+          minikube kubectl -- get pods -A
 
       - name: Set up Kubectl
         run: |
           curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
           sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+          kubectl version --client
 
       - name: Set up Helm
         run: |
@@ -38,10 +46,12 @@ jobs:
           echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
           sudo apt-get update
           sudo apt-get install helm
+          helm version
 
       - name: Deploy with Helm
         run: |
           helm upgrade --install demo ./k8s --wait
+          helm list
 
       - name: Run Tests
         run: |
