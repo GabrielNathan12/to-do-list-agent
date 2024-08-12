@@ -16,6 +16,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y curl apt-transport-https
+          sudo apt-get install -y conntrack
 
       - name: Set up Minikube
         run: |
