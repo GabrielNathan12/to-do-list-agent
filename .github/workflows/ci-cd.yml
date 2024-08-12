@@ -18,17 +18,18 @@ jobs:
           sudo apt-get install -y curl apt-transport-https
           sudo apt-get install -y conntrack
           sudo apt-get install -y cri-tools
+
       - name: Set up Minikube
         run: |
           curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
           sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
-          minikube start --driver=none
+          minikube start --driver=none --memory=2048 --cpus=2
+          minikube status
 
       - name: Set up Kubectl
         run: |
-            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-            sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
-
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
       - name: Set up Helm
         run: |
