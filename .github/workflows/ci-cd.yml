@@ -23,13 +23,18 @@ jobs:
             $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
           sudo apt-get update
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+      - name: Set up Docker group
+        run: |
+          sudo groupadd docker || true
           sudo usermod -aG docker $USER
+          newgrp docker
 
       - name: Start Docker
         run: |
           sudo systemctl start docker
           sudo systemctl enable docker
-          sudo docker --version
+          docker --version
 
       - name: Install dependencies
         run: |
@@ -39,7 +44,9 @@ jobs:
         run: |
           curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
           sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
-          sudo minikube start --driver=docker
+          sudo chown -R $USER:$USER $HOME/.kube $HOME/.minikube || true
+          mkdir -p $HOME/.kube $HOME/.minikube
+          minikube start --driver=docker
           minikube status
           minikube kubectl -- get pods -A
 
