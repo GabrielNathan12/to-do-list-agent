@@ -89,6 +89,3 @@ volumes:
     volume_pgsql: pgsql-storage
     volume_mongo: mongo-storage
   storage: 1Mi
-
-  #minikube service demo-frontend-service --url
-  #kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.15.2/cert-manager.yaml
