@@ -195,6 +195,7 @@ O projeto é um gerenciador de tarefas com um bot inteligente incluso, onde atra
     ```bash
     minikube service <nome-da-sua-realease>-frontend-service --url   
     ```
+    - Pegue o IP retornando e coloque ele ao navegador, a aplicação estará disponível lá.
 ## Considerações Finais
 - Verifique os arquivos de configuração e as variáveis de ambiente para garantir que estejam configurados corretamente.
 - A senha de seu usuário precisa ter no mínimo 8 caracteres.
