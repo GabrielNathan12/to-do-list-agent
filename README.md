@@ -187,6 +187,22 @@ O projeto é um gerenciador de tarefas com um bot inteligente incluso, onde atra
     ```
 4. **Obtenha o IP do frontend no cluster**
     - Foi usado o minikube no desenvolvimento desse projeto, então o processo de ativação do Ingress pode ser um pouco diferente, em ambientes como Kind.
+    - Ative o cert manager no cluster, com os seguintes comandos.
+      ```bash
+      kubectl apply --validate=false -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.5/cert-manager.crds.yaml
+      ```
+      ```bash
+      helm repo add jetstack https://charts.jetstack.io
+      ```
+      ```bash
+      helm repo update
+      ```
+      ```bash
+      helm install cert-manager jetstack/cert-manager --namespace cert-manager --create-namespace --version v1.12.5
+      ```
+      ```bash
+      kubectl wait --namespace cert-manager --for=condition=available deployment/cert-manager --timeout=120s
+      ```
     - Se estiver usando o minikube, ative o Ingress com esse seguinte comando.
      ```bash
       minikube addons enable ingress  

@@ -81,4 +81,5 @@ jobs:
       - name: Run Tests
         run: |
           minikube addons enable ingress 
-          kubectl get pods
+          kubectl get all
+          kubectl get ingress
