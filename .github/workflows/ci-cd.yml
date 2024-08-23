@@ -37,16 +37,13 @@ jobs:
       - name: Start Minikube
         run: |
           minikube start --driver=docker
-          sleep 30  # Espera para garantir que o Minikube esteja totalmente operacional
           minikube status
+          minikube kubectl -- get pods -A
 
       - name: Configure kubectl to use Minikube context
         run: |
           kubectl config use-context minikube
-          kubectl cluster-info
-
-      - name: Verificar a configuração do contexto Kubernetes
-        run: kubectl config current-context
+          kubectl config current-context
 
       - name: Export Minikube environment variables
         run: |
