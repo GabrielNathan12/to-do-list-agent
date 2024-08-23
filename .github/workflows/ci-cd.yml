@@ -86,9 +86,6 @@ jobs:
           helm upgrade --install demo ./k8s --wait
           helm list
 
-      - name: Capture Minikube Logs
-        run: minikube logs
-
       - name: Run Tests
         run: |
           minikube addons enable ingress 
