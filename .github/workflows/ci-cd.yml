@@ -74,12 +74,6 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
-      - name: Verify Kubernetes Connection
-        run: |
-          kubectl config use-context minikube || echo "No Minikube context found"
-          kubectl cluster-info
-          kubectl get nodes
-
       - name: Deploy with Helm
         run: |
           helm upgrade --install demo ./k8s --wait
