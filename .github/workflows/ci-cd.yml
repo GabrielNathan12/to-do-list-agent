@@ -77,6 +77,7 @@ jobs:
 
       - name: Verify Minikube and Kubernetes Connection
         run: |
+          minikube start
           kubectl config use-context minikube || echo "No Minikube context found"
           kubectl cluster-info
           kubectl get nodes
