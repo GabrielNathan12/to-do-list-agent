@@ -45,15 +45,13 @@ jobs:
           minikube status
           minikube kubectl -- get nodes
           kubectl config view
+          kubectl config get-contexts
+          kubectl config use-context minikube || echo "No Minikube context found"
+          kubectl config current-context
           kubectl cluster-info
           kubectl get nodes
           kubectl get pods -A
           kubectl get services -A
-
-      - name: Configure kubectl to use Minikube context
-        run: |
-          kubectl config use-context minikube || echo "No Minikube context found"
-          kubectl config current-context
 
       - name: Export Minikube environment variables
         run: |
