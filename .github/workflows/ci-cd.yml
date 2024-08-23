@@ -39,8 +39,9 @@ jobs:
           minikube start --driver=docker
           minikube status
           minikube kubectl -- get nodes
+          minikube profile list
 
-      - name: Verify Minikube and Kubernetes Configuration
+      - name: Test Minikube and kubectl Setup
         run: |
           minikube status
           minikube kubectl -- get nodes
