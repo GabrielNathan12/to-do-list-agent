@@ -39,20 +39,21 @@ jobs:
           minikube start --driver=docker
           minikube status
           minikube kubectl -- get nodes
-          minikube profile list
 
-      - name: Test Minikube and kubectl Setup
+      - name: Verify Minikube Status
+        run: minikube status
+
+      - name: Verify kubectl Configuration
         run: |
-          minikube status
-          minikube kubectl -- get nodes
           kubectl config view
           kubectl config get-contexts
           kubectl config use-context minikube || echo "No Minikube context found"
           kubectl config current-context
           kubectl cluster-info
           kubectl get nodes
-          kubectl get pods -A
-          kubectl get services -A
+
+      - name: Wait for Minikube to Be Ready
+        run: sleep 30
 
       - name: Export Minikube environment variables
         run: |
@@ -74,10 +75,19 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
+      - name: Verify Minikube and Kubernetes Connection
+        run: |
+          kubectl config use-context minikube || echo "No Minikube context found"
+          kubectl cluster-info
+          kubectl get nodes
+
       - name: Deploy with Helm
         run: |
           helm upgrade --install demo ./k8s --wait
           helm list
+
+      - name: Capture Minikube Logs
+        run: minikube logs
 
       - name: Run Tests
         run: |
