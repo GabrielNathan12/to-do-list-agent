@@ -11,13 +11,36 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
-      - name: start minikube
-        id: minikube
-        uses: medyagh/setup-minikube@latest
-      - name: Set up Helm
-        uses: azure/setup-helm@v4.2.0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Install Kubectl
+        uses: azure/setup-kubectl@v3
         with:
-          version: v3.14.4
+          version: 'latest'
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v3
+        with:
+          version: 'latest'
+
+      - name: Set up Minikube
+        uses: medyagh/setup-minikube@latest
+        with:
+          minikube version: 'latest'
+          driver: docker
+
+      - name: Start Minikube
+        run: |
+          minikube start --driver=docker
+          minikube status
+          kubectl config use-context minikube
+          kubectl get nodes
+
       - name: Install cert-manager
         run: |
           kubectl apply --validate=false -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.5/cert-manager.crds.yaml
@@ -33,9 +56,15 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v3
 
+      - name: Verify Kubernetes Connection
+        run: |
+          kubectl config use-context minikube
+          kubectl cluster-info
+          kubectl get nodes
+
       - name: Deploy with Helm
         run: |
-          helm install demo ./k8s --wait
+          helm upgrade --install demo ./k8s --wait
           helm list
 
       - name: Run Tests
