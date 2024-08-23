@@ -35,7 +35,7 @@ jobs:
 
       - name: Deploy with Helm
         run: |
-          helm upgrade --install demo ./k8s --wait
+          helm install demo ./k8s --wait
           helm list
 
       - name: Run Tests
