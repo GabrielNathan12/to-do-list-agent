@@ -35,7 +35,14 @@ jobs:
           driver: docker
 
       - name: Start Minikube
-        run: minikube start --driver=docker
+        run: |
+          minikube start --driver=docker
+          minikube status
+
+      - name: Configure kubectl to use Minikube context
+        run: |
+          kubectl config use-context minikube
+          kubectl cluster-info
 
       - name: Install cert-manager
         run: |
