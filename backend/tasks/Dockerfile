@@ -1,5 +1,5 @@
 # Usar a imagem base do Python
-FROM python:3.12-slim-bookworm
+FROM python:3.13.0b4-slim
 
 
 ENV PYTHONDONTWRITEBYTECODE 1
