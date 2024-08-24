@@ -20,10 +20,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.1",
     "uuid": "^10.0.0",
-    "validator": "^13.12.0",
-    "react-scripts": "^5.0.1",
-    "web-vitals": "^2.1.4",
-    "nth-check": "^2.1.1"
+    "validator": "^13.12.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -33,12 +30,7 @@
     "@types/mongoose": "^5.11.97",
     "@types/node": "^20.14.11",
     "@types/validator": "^13.12.0",
-    "snyk": "^1.1292.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
-  },
-  "overrides": {
-    "nth-check": "^2.1.1",
-    "postcss":"^8.4.38"
   }
 }

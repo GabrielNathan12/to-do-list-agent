@@ -24,7 +24,6 @@
     "react-icons": "^5.2.1",
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.26.0",
-    "react-scripts": "^5.0.1",
     "serialize-javascript": "^6.0.2",
     "svgo": "^2.3.1",
     "web-vitals": "^2.1.4"
@@ -55,6 +54,8 @@
   },
   "devDependencies": {
     "@types/react-modal": "^3.16.3",
-    "snyk": "^1.1292.4"
+    "snyk": "^1.1292.4",
+    "react-scripts": "^5.0.1"
+
   }
 }
