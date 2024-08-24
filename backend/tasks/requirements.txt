@@ -7,3 +7,4 @@ sqlparse==0.5.1
 python-dotenv>=1.0.1,<1.1
 psycopg2-binary>=2.9.9,<2.10
 django-cors-headers==4.4.0
+bandit==1.7.9
