@@ -31,7 +31,6 @@ jobs:
       - name: Set up Minikube
         uses: medyagh/setup-minikube@latest
         with:
-          minikube version: 'latest'
           driver: docker
 
       - name: Start Minikube
