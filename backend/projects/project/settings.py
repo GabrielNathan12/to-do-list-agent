@@ -140,5 +140,5 @@ STATIC_ROOT = DATA_DIR / 'static'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
-    os.getenv('CORS_ALLOWED_ORIGINS'),
+    origin.strip() for origin in os.getenv('CORS_ALLOWED_ORIGINS', '').split(',')
 ]

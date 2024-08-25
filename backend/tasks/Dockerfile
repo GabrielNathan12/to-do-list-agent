@@ -1,16 +1,15 @@
-# Usar a imagem base do Python
-FROM python:3.13.0b4-slim
-
+FROM python:3.12-slim-bookworm
 
 ENV PYTHONDONTWRITEBYTECODE 1
-
 ENV PYTHONUNBUFFERED 1
 
-COPY . /backend
+WORKDIR /tasks
+
+COPY requirements.txt /tasks/requirements.txt
+
+COPY . /tasks/
+
 COPY scripts /scripts
-
-WORKDIR /backend
-
 
 RUN apt-get update && apt-get install -y \
     gcc \
@@ -23,11 +22,9 @@ RUN apt-get update && \
     apt-get install -y netcat-traditional redis-server && \
     python -m venv /venv && \
     /venv/bin/pip install --upgrade pip && \
-    /venv/bin/pip install -r /backend/requirements.txt && \
+    /venv/bin/pip install -r /tasks/requirements.txt && \
     chmod -R +x /scripts
 
-
+    
 ENV PATH="/scripts:/venv/bin:$PATH"
-
-
 CMD ["commands.sh"]

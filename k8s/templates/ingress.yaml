@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
   - hosts:
-    - tcc.192.168.49.2.nip.io
+    - backend.192.168.49.2.nip.io
     secretName: {{ .Release.Name }}-letsencrypt
   rules:
-  - host: tcc.192.168.49.2.nip.io
+  - host: backend.192.168.49.2.nip.io
     http:
       paths:
       - pathType: Prefix
