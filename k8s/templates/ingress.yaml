@@ -5,13 +5,15 @@ metadata:
   annotations:
     nginx.ingress.kubernetes.io/use-regex: "true"
     cert-manager.io/cluster-issuer: {{ .Release.Name }}-letsencrypt
+    nginx.ingress.kubernetes.io/add-headers: |
+      Content-Security-Policy: default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'
 spec:
   tls:
   - hosts:
-    - tcc.192.168.49.2.nip.io
+    - backend.192.168.49.2.nip.io
     secretName: {{ .Release.Name }}-letsencrypt
   rules:
-  - host: tcc.192.168.49.2.nip.io
+  - host: backend.192.168.49.2.nip.io
     http:
       paths:
       - pathType: Prefix

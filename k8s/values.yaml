@@ -2,7 +2,7 @@ frontend:
   name: frontend-deploy
   image: gabrielnathan/frontend
   namespace: frontend
-  tag: 1.0.5
+  tag: 1.0.6
   service: NodePort
   replicas: 1
 
@@ -31,17 +31,17 @@ mysqldb:
 djangomysql:
   name: django-mysql
   image: gabrielnathan/projects
-  tag: 1.0.6
+  tag: 1.0.8
 
 djangopgsql:
   name: django-pgsql
   image: gabrielnathan/tasks
-  tag: 1.0.5
+  tag: 1.0.7
 
 nodejs:
   name: nodejs
   image: gabrielnathan/users
-  tag: 1.0.7
+  tag: 1.0.8
 
 service:
   type: ClusterIP
@@ -49,10 +49,10 @@ service:
 replicas: 1
 
 secrets:
-  url_users: aHR0cHM6Ly90Y2MuMTkyLjE2OC40OS4yLm5pcC5pby91c2Vycw==
-  url_projects: aHR0cHM6Ly90Y2MuMTkyLjE2OC40OS4yLm5pcC5pbw==
-  url_tasks: aHR0cHM6Ly90Y2MuMTkyLjE2OC40OS4yLm5pcC5pby90YXNrcy8=
-  url_ai: aHR0cHM6Ly90Y2MuMTkyLjE2OC40OS4yLm5pcC5pby9haS8=
+  url_users: aHR0cHM6Ly9iYWNrZW5kLjE5Mi4xNjguNDkuMi5uaXAuaW8vdXNlcnM=
+  url_projects: aHR0cHM6Ly9iYWNrZW5kLjE5Mi4xNjguNDkuMi5uaXAuaW8=
+  url_tasks: aHR0cHM6Ly9iYWNrZW5kLjE5Mi4xNjguNDkuMi5uaXAuaW8vdGFza3Mv
+  url_ai: aHR0cHM6Ly9iYWNrZW5kLjE5Mi4xNjguNDkuMi5uaXAuaW8vYWkv
   
   mongodb_port: MjcwMTc=
   jwt_secret: MmRzamtkYXMwOWRzYTkwZGFqa2FzZGFta3NAISQlJWFkMDk4OW5rLTIzJCQhQA==
@@ -66,12 +66,12 @@ secrets:
   mysql_user_password: Z2FicmllbDEyMw==
   mysql_db: cHJvamVjdHNfa2FuYmFu
 
-  cors_allowed_origins: aHR0cDovLzE5Mi4xNjguNDkuMjozMDA4MA==
+  cors_allowed_origins: aHR0cHM6Ly9mcm9udGVuZC4xOTIuMTY4LjQ5LjIubmlwLmlv
   django_engine_pgsql: ZGphbmdvLmRiLmJhY2tlbmRzLnBvc3RncmVzcWw=
   django_port_pgsql: NTQzMg==
   django_secret_key_pgsql: ZGphbmdvLWluc2VjdXJlLW0ocW1yZTVnJDBvbiVzNW5fdmFeODBnZXFnMmE0d14kMl9vKngwKjhiZXd5d0BkeC0t
   django_debug_pgsql: MQ==
-  django_allowed_hosts_pgsql: dGNjLjE5Mi4xNjguNDkuMi5uaXAuaW8=
+  django_allowed_hosts_pgsql: YmFja2VuZC4xOTIuMTY4LjQ5LjIubmlwLmlv
   
   open_ai_model: Z3B0LTRvLW1pbmk=
   open_ai_key: c2stcHJvai1QemFTSjRYR0hCUFhDZFFvcUczelQzQmxia0ZKbDNtWHBLWTFydkNXRWI0SUlTUEg=
@@ -80,7 +80,7 @@ secrets:
   django_port_mysql: MzMwNg==
   django_secret_key_mysql: ZGphbmdvLWluc2VjdXJlLW0ocW1yZTVnJDBvbiVzNW5fdmFeODBnZXFnMmE0d14kMl9vKngwKjhiZXd5d0BkeC0t
   django_debug_mysql: MQ==
-  django_allowed_hosts_mysql: dGNjLjE5Mi4xNjguNDkuMi5uaXAuaW8=
+  django_allowed_hosts_mysql: YmFja2VuZC4xOTIuMTY4LjQ5LjIubmlwLmlv
 
 volumes:
   names: 
