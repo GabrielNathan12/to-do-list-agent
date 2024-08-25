@@ -3,7 +3,7 @@ frontend:
   image: gabrielnathan/frontend
   namespace: frontend
   tag: 1.0.6
-  service: NodePort
+  service: ClusterIP
   replicas: 1
 
 
